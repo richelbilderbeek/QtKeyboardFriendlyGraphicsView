@@ -1,13 +1,13 @@
-include(../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/ToolTestQtKeyboardFriendlyGraphicsViewConsole.pri)
+include(../TestKeyboardFriendlyGraphicsView/ToolTestQtKeyboardFriendlyGraphicsViewConsole.pri)
 
 HEADERS += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewwidget.h \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewmenudialog.h
+    ../TestKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewwidget.h \
+    ../TestKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewmenudialog.h
 
 SOURCES += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewwidget.cpp \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewmenudialog.cpp
+    ../TestKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewwidget.cpp \
+    ../TestKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewmenudialog.cpp
 
 FORMS += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewmenudialog.ui
+    ../TestKeyboardFriendlyGraphicsView/qttestqtkeyboardfriendlygraphicsviewmenudialog.ui
 

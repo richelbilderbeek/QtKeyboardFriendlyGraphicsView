@@ -1,14 +1,14 @@
 INCLUDEPATH += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView
+    ../TestKeyboardFriendlyGraphicsView
 
 SOURCES += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/testqtkeyboardfriendlygraphicsviewmenudialog.cpp
+    ../TestKeyboardFriendlyGraphicsView/testqtkeyboardfriendlygraphicsviewmenudialog.cpp
 
 HEADERS += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/testqtkeyboardfriendlygraphicsviewmenudialog.h
+    ../TestKeyboardFriendlyGraphicsView/testqtkeyboardfriendlygraphicsviewmenudialog.h
 
 OTHER_FILES += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/Licence.txt
+    ../TestKeyboardFriendlyGraphicsView/Licence.txt
 
 RESOURCES += \
-    ../../Tools/ToolTestQtKeyboardFriendlyGraphicsView/ToolTestQtKeyboardFriendlyGraphicsView.qrc
+    ../TestKeyboardFriendlyGraphicsView/ToolTestQtKeyboardFriendlyGraphicsView.qrc
