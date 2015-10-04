@@ -10,6 +10,8 @@ include(../RibiClasses/CppContainer/CppContainer.pri)
 include(../RibiClasses/CppGeometry/CppGeometry.pri)
 include(../RibiClasses/CppPlane/CppPlane.pri)
 include(../RibiClasses/CppRibiRegex/CppRibiRegex.pri)
+include(../RibiClasses/CppRibiSystem/CppRibiSystem.pri)
+include(../RibiClasses/CppRibiTime/CppRibiTime.pri)
 
 include(../RibiClasses/CppFuzzy_equal_to/CppFuzzy_equal_to.pri)
 include(../RibiClasses/CppGrabber/CppGrabber.pri)
