@@ -3,7 +3,7 @@ include(../RibiLibraries/DesktopApplicationNoWeffcpp.pri)
 include(../RibiLibraries/GeneralConsole.pri)
 include(../RibiLibraries/GeneralDesktop.pri)
 include(../RibiLibraries/Apfloat.pri)
-include(../RibiLibraries/Boost.pri)
+include(../RibiLibraries/BoostAll.pri)
 
 include(../RibiClasses/CppCounter/CppCounter.pri)
 include(../RibiClasses/CppContainer/CppContainer.pri)
