@@ -44,15 +44,14 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphicsViewMenuDialog(QWidget *parent) :
   QtHideAndShowDialog(parent),
-  ui(new Ui::QtTestKeyboardFriendlyGraphicsViewMenuDialog)
+  ui(new Ui::QtTestKeyboardFriendlyGraphicsViewMenuDialog),
+  m_widget{new Widget}
 {
   #ifndef NDEBUG
   Test();
   #endif
   ui->setupUi(this);
   {
-    typedef QtTestKeyboardFriendlyGraphicsViewWidget Widget;
-    Widget * const widget = new Widget;
     widget->m_signal_request_about.connect(
       boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout,this));
     widget->m_signal_request_quit.connect(
@@ -62,8 +61,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphi
   //Make this dialog big and centered
   {
     const QRect rect = QDesktopWidget().geometry();
-    this->setGeometry(rect.adjusted(64,64,-64,-64));
+    this->setGeometry(rect.adjusted(0,32,0,-32));
   }
+  //Create a polling timer
 }
 
 ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::~QtTestKeyboardFriendlyGraphicsViewMenuDialog() noexcept

@@ -24,10 +24,12 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "qthideandshowdialog.h"
 
 namespace Ui {
-class QtTestKeyboardFriendlyGraphicsViewMenuDialog;
+  class QtTestKeyboardFriendlyGraphicsViewMenuDialog;
 }
 
 namespace ribi {
+
+class QtTestKeyboardFriendlyGraphicsViewWidget;
 
 class QtTestKeyboardFriendlyGraphicsViewMenuDialog : public QtHideAndShowDialog
 {
@@ -49,6 +51,8 @@ private slots:
 private:
   Ui::QtTestKeyboardFriendlyGraphicsViewMenuDialog *ui;
 
+  using Widget = QtTestKeyboardFriendlyGraphicsViewWidget;
+  Widget * m_widget;
   #ifndef NDEBUG
   static void Test() noexcept;
   #endif
