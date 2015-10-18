@@ -314,7 +314,7 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
     }
   }
 
-
+  this->SetVerbosity(true);
 }
 
 void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::DoUpdateScene()
