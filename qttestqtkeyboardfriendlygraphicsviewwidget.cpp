@@ -44,7 +44,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsViewWidget()
   : m_signal_request_about{},
-    m_signal_request_quit{}
+    m_signal_request_quit{},
+    m_signal_request_virtual_bastard{}
 {
   #ifndef NDEBUG
   Test();
@@ -67,6 +68,12 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
     {
       QGraphicsTextItem * const item = new QGraphicsTextItem("a: about");
       item->setToolTip("a: about");
+      scene()->addItem(item);
+      item->setPos(midx + 0.0 - item->boundingRect().center().x(),midy +  0.0 - item->boundingRect().center().y());
+    }
+    {
+      QGraphicsTextItem * const item = new QGraphicsTextItem("b: start virtual bastard");
+      item->setToolTip("b: start virtual bastard");
       scene()->addItem(item);
       item->setPos(midx + 0.0 - item->boundingRect().center().x(),midy + 20.0 - item->boundingRect().center().y());
     }
@@ -350,15 +357,16 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::DoUpdateScene()
   scene()->update();
 }
 
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::keyPressEvent(QKeyEvent *event) noexcept
 {
   switch (event->key())
   {
-
     case Qt::Key_Escape: m_signal_request_quit(); break;
     case Qt::Key_A     : m_signal_request_about(); break;
+    case Qt::Key_B     : m_signal_request_virtual_bastard(); break;
   }
   QtKeyboardFriendlyGraphicsView::keyPressEvent(event);
 }

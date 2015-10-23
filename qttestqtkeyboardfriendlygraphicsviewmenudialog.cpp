@@ -44,9 +44,43 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "ui_qttestqtkeyboardfriendlygraphicsviewmenudialog.h"
 #pragma GCC diagnostic pop
 
+namespace ribi {
+  namespace testqtkeyboardfriendlygraphicsviewmenudialog {
+    QKeyEvent CreateCtrlLeft() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Left,Qt::ControlModifier); }
+    QKeyEvent CreateCtrlRight() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Right,Qt::ControlModifier); }
+    QKeyEvent CreateShift() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Shift,Qt::NoModifier); }
+    QKeyEvent CreateShiftLeft() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Left,Qt::ShiftModifier); }
+    QKeyEvent CreateShiftRight() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Right,Qt::ShiftModifier); }
+    QKeyEvent CreateDown() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Down,Qt::NoModifier); }
+    QKeyEvent CreateLeft() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Left,Qt::NoModifier); }
+    QKeyEvent CreateRight() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Right,Qt::NoModifier); }
+    QKeyEvent CreateSpace() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Space,Qt::NoModifier); }
+    QKeyEvent CreateUp() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_Up,Qt::NoModifier); }
+    QKeyEvent CreateX() noexcept { return QKeyEvent(QEvent::KeyPress,Qt::Key_X,Qt::NoModifier); }
+    QKeyEvent CreateRandomKey() noexcept {
+      switch (std::rand() % 10)
+      {
+        case 0: return CreateCtrlLeft();
+        case 1: return CreateCtrlRight();
+        case 2: return CreateShift();
+        case 3: return CreateShiftLeft();
+        case 4: return CreateShiftRight();
+        case 5: return CreateLeft();
+        case 6: return CreateRight();
+        case 7: return CreateSpace();
+        case 8: return CreateUp();
+        case 9: return CreateX();
+      }
+      return CreateSpace();
+    }
+  }
+}
+
+
 ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphicsViewMenuDialog(QWidget *parent) :
   QtHideAndShowDialog(parent),
   ui(new Ui::QtTestKeyboardFriendlyGraphicsViewMenuDialog),
+  m_timer_virtual_bastard{new QTimer(this)},
   m_widget{new Widget}
 {
   #ifndef NDEBUG
@@ -58,6 +92,8 @@ ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphi
       boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout,this));
     m_widget->m_signal_request_quit.connect(
       boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::Quit,this));
+    m_widget->m_signal_request_virtual_bastard.connect(
+      boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ToggleVirtualBastard,this));
     ui->layout->addWidget(m_widget,0,0);
   }
   //Make this dialog big and centered
@@ -71,6 +107,11 @@ ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphi
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(OnTimer()));
     timer->setInterval(100);
     timer->start();
+  }
+  {
+    QObject::connect(m_timer_virtual_bastard,SIGNAL(timeout()),this,SLOT(OnVirtualBastard()));
+    m_timer_virtual_bastard->setInterval(100);
+    //Do not start the m_timer_virtual_bastard
   }
 }
 
@@ -106,6 +147,14 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::OnTimer()
   ui->plainTextEdit->setPlainText(s.str().c_str());
 }
 
+void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::OnVirtualBastard()
+{
+  QKeyEvent event{
+    testqtkeyboardfriendlygraphicsviewmenudialog::CreateRandomKey()
+  };
+  m_widget->keyPressEvent(&event);
+}
+
 void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout()
 {
   About about = TestKeyboardFriendlyGraphicsViewMenuDialog().GetAbout();
@@ -121,6 +170,16 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout()
   QtAboutDialog d(about);
   d.setWindowIcon(this->windowIcon());
   this->ShowChild(&d);
+}
+
+void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ToggleVirtualBastard()
+{
+  if (m_timer_virtual_bastard->isActive()) {
+    m_timer_virtual_bastard->stop();
+  }
+  else {
+    m_timer_virtual_bastard->start();
+  }
 }
 
 void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::Quit()

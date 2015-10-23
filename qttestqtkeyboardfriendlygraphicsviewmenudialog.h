@@ -42,17 +42,20 @@ public:
   ~QtTestKeyboardFriendlyGraphicsViewMenuDialog() noexcept;
 
   void ShowAbout();
+  void ToggleVirtualBastard();
   void Quit();
 
 private slots:
   void keyPressEvent(QKeyEvent* e);
   void OnTimer();
+  void OnVirtualBastard();
 
 
 private:
   Ui::QtTestKeyboardFriendlyGraphicsViewMenuDialog *ui;
 
   using Widget = QtTestKeyboardFriendlyGraphicsViewWidget;
+  QTimer * const m_timer_virtual_bastard;
   Widget * m_widget;
   #ifndef NDEBUG
   static void Test() noexcept;

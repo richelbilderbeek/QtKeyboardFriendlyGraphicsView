@@ -45,7 +45,8 @@ struct QtTestKeyboardFriendlyGraphicsViewWidget : public QtKeyboardFriendlyGraph
   ///Signal emitted when the user wants to quit
   boost::signals2::signal<void()> m_signal_request_quit;
 
-protected:
+  ///Signal emitted when the user wants to start/stop the virtual bastard
+  boost::signals2::signal<void()> m_signal_request_virtual_bastard;
 
   void keyPressEvent(QKeyEvent *event) noexcept;
 
