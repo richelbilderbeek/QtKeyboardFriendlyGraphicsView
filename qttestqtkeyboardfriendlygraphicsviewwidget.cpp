@@ -56,14 +56,17 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
     const double midy = 0.0;
     const double ray = 100.0;
     QGraphicsEllipseItem * const circle = new QGraphicsEllipseItem(midx - ray, midy - ray,2.0 * ray,2.0 * ray);
+    circle->setToolTip("Legend circle");
     scene()->addItem(circle);
     {
       QGraphicsTextItem * const item = new QGraphicsTextItem("ESC: Quit");
+      item->setToolTip("ESC: Quit");
       scene()->addItem(item);
       item->setPos(midx + 0.0 - item->boundingRect().center().x(),midy - 20.0 - item->boundingRect().center().y());
     }
     {
       QGraphicsTextItem * const item = new QGraphicsTextItem("a: about");
+      item->setToolTip("a: about");
       scene()->addItem(item);
       item->setPos(midx + 0.0 - item->boundingRect().center().x(),midy + 20.0 - item->boundingRect().center().y());
     }
@@ -78,9 +81,11 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
     const int n = 3;
     const double ray = 100.0;
     QGraphicsTextItem * const text = new QGraphicsTextItem("QGraphicsRectItem");
+    text->setToolTip("QGraphicsRectItem text");
     text->setPos(midx - text->boundingRect().center().x(),midy - text->boundingRect().center().y());
     scene()->addItem(text);
     QGraphicsEllipseItem * const circle = new QGraphicsEllipseItem(midx - ray, midy - ray,2.0 * ray,2.0 * ray);
+    circle->setToolTip("QGraphicsRectItem circle");
     scene()->addItem(circle);
 
     for (int i=0; i!=n; ++i)
@@ -92,6 +97,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       item->setPos(x,y);
       item->setRect(-16.0,-16.0,32.0,32.0);
       item->setFlags(QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+      item->setToolTip(
+        (std::string("QGraphicsRectItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }
@@ -114,6 +122,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       const double y = midy - (std::cos(angle) * 0.5 * ray);
       Item * const item = new Item;
       item->SetCenterPos(x,y);
+      item->setToolTip(
+        (std::string("QtRoundedRectItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }
@@ -137,6 +148,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       Item * const item = new Item;
       item->SetCenterPos(x,y);
       //item->setRect(-16.0,-16.0,32.0,32.0);
+      item->setToolTip(
+        (std::string("QtRoundedTextRectItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }
@@ -159,7 +173,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       const double y = midy - (std::cos(angle) * 0.5 * ray);
       Item * const item = new Item;
       item->setPos(x,y);
-      //item->setRect(-16.0,-16.0,32.0,32.0);
+      item->setToolTip(
+        (std::string("QtLeftRightRectItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }
@@ -182,8 +198,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       const double y = midy - (std::cos(angle) * 0.5 * ray);
       Item * const item = new Item;
       item->setPos(x - item->boundingRect().center().x(),y - item->boundingRect().center().y());
-      //item->setPos(x,y);
-      //item->setRect(-16.0,-16.0,32.0,32.0);
+      item->setToolTip(
+        (std::string("QtDisplayPosItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }
@@ -222,6 +239,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       {
         assert(v[0] && v[1] && v[2]);
         Item * const item = new Item(v[0],false,v[1],true,v[2]);
+        item->setToolTip(
+          (std::string("QtQuadBezierArrow #") + std::to_string(i)).c_str()
+        );
         scene()->addItem(item);
       }
     }
@@ -249,6 +269,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       Item * const item = new Item(x1,y1,false,x2,y2,true);
       item->m_signal_item_requests_scene_update.connect(boost::bind(&This::DoUpdateScene,this));
       scene()->addItem(item);
+      item->setToolTip(
+        (std::string("QtArrowItem #") + std::to_string(i)).c_str()
+      );
     }
   }
   {
@@ -277,6 +300,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       const double y2 = midy - std::cos(angle) * 0.9 * ray;
       Item * const item = new Item(QPointF(x1,y1),false, { QPointF(x_mid,y_mid) },true,QPointF(x2,y2));
       item->m_signal_item_requests_scene_update.connect(boost::bind(&This::DoUpdateScene,this));
+      item->setToolTip(
+        (std::string("QtPathArrowItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }
@@ -309,7 +335,9 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       }
 
       item->SetText(text);
-      //item->setRect(-16.0,-16.0,32.0,32.0);
+      item->setToolTip(
+        (std::string("QtRoundedEditRectItem #") + std::to_string(i)).c_str()
+      );
       scene()->addItem(item);
     }
   }

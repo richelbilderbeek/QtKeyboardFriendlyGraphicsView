@@ -26,6 +26,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDesktopWidget>
 #include <QKeyEvent>
+#include <QTimer>
+
 #include "about.h"
 #include "qtaboutdialog.h"
 #include "qtarrowitem.h"
@@ -52,11 +54,11 @@ ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphi
   #endif
   ui->setupUi(this);
   {
-    widget->m_signal_request_about.connect(
+    m_widget->m_signal_request_about.connect(
       boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout,this));
-    widget->m_signal_request_quit.connect(
+    m_widget->m_signal_request_quit.connect(
       boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::Quit,this));
-    ui->layout->addWidget(widget,0,0);
+    ui->layout->addWidget(m_widget,0,0);
   }
   //Make this dialog big and centered
   {
@@ -64,16 +66,44 @@ ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphi
     this->setGeometry(rect.adjusted(0,32,0,-32));
   }
   //Create a polling timer
+  {
+    QTimer * const timer{new QTimer(this)};
+    QObject::connect(timer,SIGNAL(timeout()),this,SLOT(OnTimer()));
+    timer->setInterval(100);
+    timer->start();
+  }
 }
 
 ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::~QtTestKeyboardFriendlyGraphicsViewMenuDialog() noexcept
 {
   delete ui;
+  m_widget->m_signal_request_about.disconnect(
+    boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout,this));
+  m_widget->m_signal_request_quit.disconnect(
+    boost::bind(&ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::Quit,this));
 }
 
 void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::keyPressEvent(QKeyEvent* e)
 {
   if (e->key()  == Qt::Key_Escape) close();
+}
+
+void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::OnTimer()
+{
+  const auto scene = m_widget->scene();
+  std::stringstream s;
+  s << "#Items: " << scene->items().size() << '\n'
+    << "#Selected: " << scene->selectedItems().size() << '\n'
+  ;
+  for (const auto item: scene->selectedItems())
+  {
+    assert(item);
+    const std::string t{item->toolTip().toStdString()};
+    s << " * " << t << '\n';
+  }
+  const std::string f{(scene->focusItem() ? scene->focusItem()->toolTip().toStdString() : std::string("[none]"))};
+  s << "Focus: " << f << '\n';
+  ui->plainTextEdit->setPlainText(s.str().c_str());
 }
 
 void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout()

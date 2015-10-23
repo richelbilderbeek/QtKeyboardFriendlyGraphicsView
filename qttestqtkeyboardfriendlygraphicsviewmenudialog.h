@@ -46,6 +46,7 @@ public:
 
 private slots:
   void keyPressEvent(QKeyEvent* e);
+  void OnTimer();
 
 
 private:
