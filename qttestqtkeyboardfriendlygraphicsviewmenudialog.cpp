@@ -83,9 +83,6 @@ ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::QtTestKeyboardFriendlyGraphi
   m_timer_virtual_bastard{new QTimer(this)},
   m_widget{new Widget}
 {
-  #ifndef NDEBUG
-  Test();
-  #endif
   ui->setupUi(this);
   {
     m_widget->m_signal_request_about.connect(
@@ -161,6 +158,7 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout()
   about.AddLibrary("QtArrowItem version: " + QtArrowItem::GetVersion());
   about.AddLibrary("QtHideAndShowDialog version: " + QtHideAndShowDialog::GetVersion());
   about.AddLibrary("QtDisplayPosItem version: " + QtDisplayPosItem::GetVersion());
+  about.AddLibrary("QtKeyboardFriendlyGraphicsView version: " + GetTestKeyboardFriendlyGraphicsViewVersion());
   about.AddLibrary("QtLeftRightRectItem version: " + QtLeftRightRectItem::GetVersion());
   about.AddLibrary("QtPathArrowItem version: " + QtPathArrowItem::GetVersion());
   about.AddLibrary("QtQuadBezierArrowItem version: " + QtQuadBezierArrowItem::GetVersion());
@@ -186,14 +184,21 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::Quit()
   close();
 }
 
-#ifndef NDEBUG
-void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::Test() noexcept
+
+std::string ribi::GetTestKeyboardFriendlyGraphicsViewVersion() noexcept
 {
-  {
-    static bool is_tested{false};
-    if (is_tested) return;
-    is_tested = true;
-  }
-  const TestTimer test_timer(__func__,__FILE__,1.0);
+  return "1.1";
 }
-#endif
+
+std::vector<std::string>
+  ribi::GetTestKeyboardFriendlyGraphicsViewVersionHistory() noexcept
+{
+  return {
+    "2012-12-13: version 0.1: initial version",
+    "2012-12-17: version 0.2: initial release, added about sceen, adding items, showing help",
+    "2012-12-19: version 0.3: improved looks, added QtArrowItem, QtPathArrowItem, QtRoundedTextRect",
+    "2013-11-05: version 0.4: conformized for ProjectRichelBilderbeekConsole",
+    "2015-10-02: version 1.0: moved to own GitHub TestKeyboardFriendlyGraphicsView",
+    "2016-09-11: version 1.1: moved to own GitHub QtKeyboardFriendlyGraphicsView"
+  };
+}

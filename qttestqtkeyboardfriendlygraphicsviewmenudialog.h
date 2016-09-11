@@ -57,10 +57,10 @@ private:
   using Widget = QtTestKeyboardFriendlyGraphicsViewWidget;
   QTimer * const m_timer_virtual_bastard;
   Widget * m_widget;
-  #ifndef NDEBUG
-  static void Test() noexcept;
-  #endif
 };
+
+std::string GetTestKeyboardFriendlyGraphicsViewVersion() noexcept;
+std::vector<std::string> GetTestKeyboardFriendlyGraphicsViewVersionHistory() noexcept;
 
 } //~namespace ribi
 
