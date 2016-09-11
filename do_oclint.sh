@@ -19,11 +19,12 @@ echo $h_files
   -I../RibiClasses/CppGeometry \
   -I../RibiClasses/CppMenuDialog \
   -I../RibiClasses/CppPlane \
+  -I../RibiClasses/CppQtAboutDialog \
   -I../RibiClasses/CppQtArrowItem \
   -I../RibiClasses/CppQtDisplayPosItem \
   -I../RibiClasses/CppQtHideAndShowDialog \
-  -I../RibiClasses/CppQtKeyboardFriendlyGraphicsView \
   -I../RibiClasses/CppQtImage \
+  -I../RibiClasses/CppQtLeftRightRectItem \
   -I../RibiClasses/CppQtRoundedEditRectItem \
   -I../RibiClasses/CppQtRoundedRectItem \
   -I../RibiClasses/CppQtQuadBezierArrowItem \
@@ -32,7 +33,6 @@ echo $h_files
   -I../RibiClasses/CppTrace \
   -I../RibiClasses/CppXml \
   -I../RibiLibraries/Apfloat \
-  -I../BoostGraphTutorial/BoostGraphTutorial \
   -I/usr/include/c++/5 \
   -I/usr/include/x86_64-linux-gnu/c++/5 \
   -I/usr/include/qt4 \
