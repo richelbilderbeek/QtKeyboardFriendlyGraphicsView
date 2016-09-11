@@ -12,13 +12,15 @@ echo $h_files
   $h_files \
   -- \
   -c -std=c++14 -fPIC \
-  -I../ConceptMap \
+  -I../RibiClasses/CppAbout \
   -I../RibiClasses/CppContainer \
   -I../RibiClasses/CppFileIo \
   -I../RibiClasses/CppFuzzy_equal_to \
   -I../RibiClasses/CppGeometry \
+  -I../RibiClasses/CppMenuDialog \
   -I../RibiClasses/CppPlane \
   -I../RibiClasses/CppQtArrowItem \
+  -I../RibiClasses/CppQtDisplayPosItem \
   -I../RibiClasses/CppQtHideAndShowDialog \
   -I../RibiClasses/CppQtKeyboardFriendlyGraphicsView \
   -I../RibiClasses/CppQtImage \
