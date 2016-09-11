@@ -161,7 +161,6 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout()
   about.AddLibrary("QtArrowItem version: " + QtArrowItem::GetVersion());
   about.AddLibrary("QtHideAndShowDialog version: " + QtHideAndShowDialog::GetVersion());
   about.AddLibrary("QtDisplayPosItem version: " + QtDisplayPosItem::GetVersion());
-  about.AddLibrary("QtKeyboardFriendlyGraphicsView version: " + QtKeyboardFriendlyGraphicsView::GetVersion());
   about.AddLibrary("QtLeftRightRectItem version: " + QtLeftRightRectItem::GetVersion());
   about.AddLibrary("QtPathArrowItem version: " + QtPathArrowItem::GetVersion());
   about.AddLibrary("QtQuadBezierArrowItem version: " + QtQuadBezierArrowItem::GetVersion());

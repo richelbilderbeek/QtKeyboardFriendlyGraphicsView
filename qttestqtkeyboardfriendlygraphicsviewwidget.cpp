@@ -274,7 +274,8 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       const double x2 = midx + std::sin(angle) * 0.9 * ray;
       const double y2 = midy - std::cos(angle) * 0.9 * ray;
       Item * const item = new Item(x1,y1,false,x2,y2,true);
-      item->m_signal_item_requests_scene_update.connect(boost::bind(&This::DoUpdateScene,this));
+
+      //item->m_signal_item_requests_scene_update.connect(boost::bind(&This::DoUpdateScene,this));
       scene()->addItem(item);
       item->setToolTip(
         (std::string("QtArrowItem #") + std::to_string(i)).c_str()
@@ -306,7 +307,7 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       const double x2 = midx + std::sin(angle) * 0.9 * ray;
       const double y2 = midy - std::cos(angle) * 0.9 * ray;
       Item * const item = new Item(QPointF(x1,y1),false, { QPointF(x_mid,y_mid) },true,QPointF(x2,y2));
-      item->m_signal_item_requests_scene_update.connect(boost::bind(&This::DoUpdateScene,this));
+      //item->m_signal_item_requests_scene_update.connect(boost::bind(&This::DoUpdateScene,this));
       item->setToolTip(
         (std::string("QtPathArrowItem #") + std::to_string(i)).c_str()
       );

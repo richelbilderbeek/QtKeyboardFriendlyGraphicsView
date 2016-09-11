@@ -23,23 +23,20 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 #include <iostream>
 
-#include "richelbilderbeekprogram.h"
-#include "testtimer.h"
 #include "trace.h"
 
 int ribi::TestKeyboardFriendlyGraphicsViewMenuDialog::ExecuteSpecific(const std::vector<std::string>& argv) noexcept
 {
-  #ifndef NDEBUG
-  Test();
-  #endif
   const int argc = static_cast<int>(argv.size());
-  if (argc == 1)
+  if (argc != 1)
   {
     std::cout << GetHelp() << '\n';
     return 1;
   }
-  assert(!"TODO");
-  return 1;
+  std::cout << "TestKeyboardFriendlyGraphicsViewMenuDialog does not have "
+    << "a command-line version\n"
+  ;
+  return 0;
 }
 
 ribi::About ribi::TestKeyboardFriendlyGraphicsViewMenuDialog::GetAbout() const noexcept
@@ -53,7 +50,6 @@ ribi::About ribi::TestKeyboardFriendlyGraphicsViewMenuDialog::GetAbout() const n
     "http://www.richelbilderbeek.nl/ToolTestKeyboardFriendlyGraphicsView.htm",
     GetVersion(),
     GetVersionHistory());
-  //a.AddLibrary("ProFile version: " + ProFile::GetVersion());
   a.AddLibrary("Trace version: " + Trace::GetVersion());
   return a;
 }
