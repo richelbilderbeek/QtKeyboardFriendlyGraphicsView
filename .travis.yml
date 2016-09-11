@@ -30,8 +30,9 @@ before_script:
 
 script: 
   - ./install_githubs.sh
-  - ./build.sh
-  - ./QtConceptMapTest
+  - ./build_demo.sh
+  - ./build_test.sh
+  - ./QtKeyboardFriendlyGraphicsViewTest
   - ./get_code_cov.sh
   - codecov
   - ./do_oclint.sh
