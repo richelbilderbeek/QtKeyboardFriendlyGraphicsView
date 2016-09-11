@@ -1,3 +1,5 @@
+CONFIG += debug_and_release
+
 include(../RibiLibraries/DesktopApplicationNoWeffcpp.pri)
 
 include(../RibiLibraries/GeneralConsole.pri)
@@ -24,6 +26,6 @@ include(../RibiClasses/CppQtQuadBezierArrowItem/CppQtQuadBezierArrowItem.pri)
 include(../RibiClasses/CppQtRoundedEditRectItem/CppQtRoundedEditRectItem.pri)
 include(../RibiClasses/CppQtRoundedRectItem/CppQtRoundedRectItem.pri)
 
-include(ToolTestQtKeyboardFriendlyGraphicsViewDesktop.pri)
+include(TestQtKeyboardFriendlyGraphicsViewDesktop.pri)
 
 SOURCES += qtmain.cpp
