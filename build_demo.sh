@@ -1,3 +1,3 @@
 #!/bin/bash
-qmake TestQtKeyboardFriendlyGraphicsViewDesktop
+qmake TestQtKeyboardFriendlyGraphicsViewDesktop.pro
 make debug
