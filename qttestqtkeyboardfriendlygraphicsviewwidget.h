@@ -54,10 +54,6 @@ private:
 
   ///Update the view
   void DoUpdateScene();
-
-  #ifndef NDEBUG
-  static void Test() noexcept;
-  #endif
 };
 
 } //~namespace ribi

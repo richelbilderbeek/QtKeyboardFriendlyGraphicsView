@@ -83,40 +83,42 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
   const int key
 )
 {
-  QGraphicsItem * closest_nonselected_item = nullptr;
+  QGraphicsItem * cnsi = nullptr; //closest_nonselected_item
   switch (key)
   {
     case Qt::Key_Up:
-      closest_nonselected_item
+      cnsi
         = GetClosestNonselectedItem(q, focus_item, Direction::above);
       break;
     case Qt::Key_Right:
-      closest_nonselected_item
+      cnsi
         = GetClosestNonselectedItem(q, focus_item, Direction::right);
       break;
     case Qt::Key_Down:
-      closest_nonselected_item
+      cnsi
         = GetClosestNonselectedItem(q, focus_item, Direction::below);
       break;
     case Qt::Key_Left:
-      closest_nonselected_item
+      cnsi
         = GetClosestNonselectedItem(q, focus_item, Direction::left);
       break;
+    default:
+      return nullptr;
   }
-  if (!closest_nonselected_item) {
+  if (cnsi) {
+    if (q.GetVerbosity()) {
+      std::stringstream s;
+      s << "Found a nonselected item with tooltip " << cnsi->toolTip().toStdString();
+      TRACE(s.str());
+    }
+  }
+  else {
+    assert(!cnsi);
     if (q.GetVerbosity()) {
       TRACE("Did not find a nonselected item");
     }
   }
-  else {
-    assert(closest_nonselected_item);
-    if (q.GetVerbosity()) {
-      std::stringstream s;
-      s << "Found a nonselected item with tooltip " << closest_nonselected_item->toolTip().toStdString();
-      TRACE(s.str());
-    }
-  }
-  return closest_nonselected_item;
+  return cnsi;
 }
 
 QGraphicsItem * ribi::GetClosestNonselectedItem(
@@ -125,39 +127,51 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
   const Direction direction
 )
 {
-  const auto my_function_loose_above  = [](const double /* dx */, const double dy) { return dy < 0.0; };
-  const auto my_function_strict_above = [](const double dx, const double dy) { return dy < 0.0 && std::abs(dx) < std::abs(dy); };
+  const auto f_loose_above  = [](const double /* dx */, const double dy) { return dy < 0.0; };
+  const auto f_strict_above = [](const double dx, const double dy)
+  {
+    return dy < 0.0 && std::abs(dx) < std::abs(dy);
+  };
 
-  const auto my_function_loose_below  = [](const double /* dx */, const double dy) { return dy > 0.0; };
-  const auto my_function_strict_below = [](const double dx, const double dy) { return dx > 0.0 && std::abs(dx) < std::abs(dy); };
+  const auto f_loose_below  = [](const double /* dx */, const double dy) { return dy > 0.0; };
+  const auto f_strict_below = [](const double dx, const double dy)
+  {
+    return dx > 0.0 && std::abs(dx) < std::abs(dy);
+  };
 
-  const auto my_function_loose_left  = [](const double dx, const double /* dy */) { return dx < 0.0; };
-  const auto my_function_strict_left = [](const double dx, const double dy) { return dx < 0.0 && std::abs(dy) < std::abs(dx); };
+  const auto f_loose_left  = [](const double dx, const double /* dy */) { return dx < 0.0; };
+  const auto f_strict_left = [](const double dx, const double dy)
+  {
+    return dx < 0.0 && std::abs(dy) < std::abs(dx);
+  };
 
-  const auto my_function_loose_right  = [](const double dx, const double /* dy */) { return dx > 0.0; };
-  const auto my_function_strict_right = [](const double dx, const double dy) { return dx > 0.0 && std::abs(dy) < std::abs(dx); };
+  const auto f_loose_right  = [](const double dx, const double /* dy */) { return dx > 0.0; };
+  const auto f_strict_right = [](const double dx, const double dy)
+  {
+    return dx > 0.0 && std::abs(dy) < std::abs(dx);
+  };
 
   using Function = std::function<bool(const double, const double)>;
-  Function my_function_loose  = my_function_loose_above;
-  Function my_function_strict = my_function_strict_above;
+  Function my_function_loose  = f_loose_above;
+  Function my_function_strict = f_strict_above;
 
   switch (direction)
   {
     case Direction::above:
-      my_function_loose = my_function_loose_above;
-      my_function_strict = my_function_strict_above;
+      my_function_loose = f_loose_above;
+      my_function_strict = f_strict_above;
       break;
     case Direction::below:
-      my_function_loose = my_function_loose_below;
-      my_function_strict = my_function_strict_below;
+      my_function_loose = f_loose_below;
+      my_function_strict = f_strict_below;
       break;
     case Direction::left:
-      my_function_loose = my_function_loose_left;
-      my_function_strict = my_function_strict_left;
+      my_function_loose = f_loose_left;
+      my_function_strict = f_strict_left;
       break;
     case Direction::right:
-      my_function_loose = my_function_loose_right;
-      my_function_strict = my_function_strict_right;
+      my_function_loose = f_loose_right;
+      my_function_strict = f_strict_right;
       break;
   }
 
@@ -258,7 +272,8 @@ std::vector<std::string> ribi::GetQtKeyboardFriendlyGraphicsViewVersionHistory()
   return {
     "2012-12-13: version 1.0: initial version",
     "2012-12-31: version 1.1: improved moving focus",
-    "2015-08-24: version 1.2: move item with CTRL, add selected with SHIFT, can move multiple items",
+    "2015-08-24: version 1.2: move item with CTRL, add selected with SHIFT, "
+      "can move multiple items",
     "2015-09-18: version 1.3: added verbosity",
     "2015-08-16: version 1.4: keyPressEvent may throw"
   };
@@ -267,15 +282,15 @@ std::vector<std::string> ribi::GetQtKeyboardFriendlyGraphicsViewVersionHistory()
 void ribi::QtKeyboardFriendlyGraphicsView::keyPressEvent(QKeyEvent *event)
 {
   if (event->modifiers() & Qt::ControlModifier) {
-    if (this->GetVerbosity()) { std::clog << "Key event using CTRL" << std::endl; }
+    if (this->GetVerbosity()) { std::clog << "Key event using CTRL" << '\n'; }
     KeyPressEventCtrl(*this, event);
   }
   else if (event->modifiers() & Qt::ShiftModifier) {
-    if (this->GetVerbosity()) { std::clog << "Key event using SHIFT" << std::endl; }
+    if (this->GetVerbosity()) { std::clog << "Key event using SHIFT" << '\n'; }
     KeyPressEventShift(*this, event);
   }
   else {
-    if (this->GetVerbosity()) { std::clog << "Key event without CTRL nor SHIFT" << std::endl; }
+    if (this->GetVerbosity()) { std::clog << "Key event without CTRL nor SHIFT" << '\n'; }
     KeyPressEventNoModifiers(*this, event);
   }
 
@@ -292,33 +307,35 @@ void ribi::KeyPressEventCtrl(
   //Do special movements
   if (event->key() == Qt::Key_Space)
   {
-    if (q.GetVerbosity()) { std::clog << "Pressing CTRL-Space" << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "Pressing CTRL-Space" << '\n'; }
     SetRandomSelectedness(q);
     return;
   }
 
 
-  if (q.GetVerbosity()) { std::clog << "CTRL pressed: try to move items" << std::endl; }
+  if (q.GetVerbosity()) { std::clog << "CTRL pressed: try to move items" << '\n'; }
   double delta_x{0.0};
   double delta_y{0.0};
   switch (event->key())
   {
     case Qt::Key_Up:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) up" << std::endl; }
+      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) up" << '\n'; }
       delta_y = -10.0;
       break;
     case Qt::Key_Right:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) right" << std::endl; }
+      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) right" << '\n'; }
       delta_x =  10.0;
       break;
     case Qt::Key_Down:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) down" << std::endl; }
+      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) down" << '\n'; }
       delta_y =  10.0;
       break;
     case Qt::Key_Left:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) left" << std::endl; }
+      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) left" << '\n'; }
       delta_x = -10.0;
       break;
+    default:
+      return;
   }
   for (const auto item: q.GetScene().selectedItems())
   {
@@ -346,42 +363,49 @@ void ribi::KeyPressEventNoModifiers(
 
   QGraphicsItem* const current_focus_item = q.GetScene().focusItem(); //Can be nullptr
   if (!current_focus_item) {
-    if (q.GetVerbosity()) { std::clog << "Cannot tranfer selectedness when there is no focus" << std::endl; }
+    if (q.GetVerbosity())
+    {
+      std::clog << "Cannot tranfer selectedness when there is no focus" << '\n';
+    }
     return;
   }
 
   const std::set<int> keys = { Qt::Key_Up, Qt::Key_Right, Qt::Key_Left, Qt::Key_Down };
   if (keys.count(event->key()) == 0) {
-    if (q.GetVerbosity()) { std::clog << "Do only movements here" << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "Do only movements here" << '\n'; }
     return;
   }
 
   assert(current_focus_item);
-  QGraphicsItem * const new_selected_item = GetClosestNonselectedItem(q, current_focus_item,event->key());
-  assert(new_selected_item != current_focus_item);
+  QGraphicsItem * const nsi // new_selected_item
+    = GetClosestNonselectedItem(q, current_focus_item,event->key());
+  assert(nsi != current_focus_item);
 
   //Unselect currently selected
   const auto current_selected_items = q.GetScene().selectedItems();
-  if (q.GetVerbosity()) { std::clog << "Unselecting " << current_selected_items.size() << " items " << std::endl; }
+  if (q.GetVerbosity())
+  {
+    std::clog << "Unselecting " << current_selected_items.size() << " items " << '\n';
+  }
   for (const auto item: current_selected_items)
   {
-    if (q.GetVerbosity()) { std::clog << "Unselect: " << item->toolTip().toStdString() << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "Unselect: " << item->toolTip().toStdString() << '\n'; }
     assert(item->isSelected());
     item->setSelected(false);
   }
   assert(!current_focus_item->isSelected() && "Focus item must have lost focus now");
   //Select newly selected
-  if (new_selected_item)
+  if (nsi)
   {
-    if (q.GetVerbosity()) { std::clog << "Select: " << new_selected_item->toolTip().toStdString() << std::endl; }
-    assert(!new_selected_item->isSelected());
-    new_selected_item->setSelected(true);
+    if (q.GetVerbosity()) { std::clog << "Select: " << nsi->toolTip().toStdString() << '\n'; }
+    assert(!nsi->isSelected());
+    nsi->setSelected(true);
   }
   //Transfer focus
   current_focus_item->clearFocus();
-  if (new_selected_item) {
-    assert(new_selected_item->isSelected());
-    new_selected_item->setFocus();
+  if (nsi) {
+    assert(nsi->isSelected());
+    nsi->setFocus();
   }
 }
 
@@ -395,7 +419,7 @@ void ribi::KeyPressEventShift(
   {
     if (q.GetVerbosity())
     {
-      std::clog << "SHIFT pressed with unaccepted key" << std::endl;
+      std::clog << "SHIFT pressed with unaccepted key" << '\n';
     }
     return;
   }
@@ -406,28 +430,31 @@ void ribi::KeyPressEventShift(
   QGraphicsItem* const current_focus_item = q.GetScene().focusItem();
   if (!current_focus_item)
   {
-    if (q.GetVerbosity()) { std::clog << "Cannot add items without a focus" << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "Cannot add items without a focus" << '\n'; }
     return;
   }
 
-  QGraphicsItem * const new_added_selected_item
+  QGraphicsItem * const nasi //new_added_selected_item
     = GetClosestNonselectedItem(q, current_focus_item,event->key())
   ;
-  assert(!new_added_selected_item || new_added_selected_item != current_focus_item);
+  assert(!nasi || nasi != current_focus_item);
 
   //Add selectedness
-  if (new_added_selected_item)
+  if (nasi)
   {
-    if (q.GetVerbosity()) { std::clog << "Add select: " << new_added_selected_item->toolTip().toStdString() << std::endl; }
-    assert(new_added_selected_item);
-    assert(!new_added_selected_item->isSelected());
-    new_added_selected_item->setSelected(true);
+    if (q.GetVerbosity())
+    {
+      std::clog << "Add select: " << nasi->toolTip().toStdString() << '\n';
+    }
+    assert(nasi);
+    assert(!nasi->isSelected());
+    nasi->setSelected(true);
   }
 
   //Transfer focus
   assert(current_focus_item);
   current_focus_item->clearFocus();
-  if (new_added_selected_item) { new_added_selected_item->setFocus(); }
+  if (nasi) { nasi->setFocus(); }
   q.GetScene().update();
 }
 
@@ -438,7 +465,7 @@ void ribi::SetRandomFocus(
   if (QGraphicsItem* const item = q.GetScene().focusItem())
   {
     assert(item);
-    if (q.GetVerbosity()) { std::clog << "Removing current focus" << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "Removing current focus" << '\n'; }
     //Really lose focus
     item->setEnabled(false);
     //assert(item->isSelected()); //Not true
@@ -448,10 +475,14 @@ void ribi::SetRandomFocus(
   }
   else
   {
-    if (q.GetVerbosity()) { std::clog << "No focused item to remove focus of" << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "No focused item to remove focus of" << '\n'; }
   }
 
-  if (q.GetVerbosity()) { std::clog << "Remove selectedness of all " << q.GetScene().selectedItems().size() << " selected items" << std::endl; }
+  if (q.GetVerbosity())
+  {
+    std::clog << "Remove selectedness of all " << q.GetScene().selectedItems().size()
+      << " selected items" << '\n';
+  }
   for (auto item: q.GetScene().selectedItems())
   {
     assert(item->isSelected());
@@ -469,24 +500,27 @@ void ribi::SetRandomFocus(
         && item->isVisible();
     }
   );
-  if (q.GetVerbosity()) { std::clog << "Obtained " << all_items.size() << " focusable items" << std::endl; }
+  if (q.GetVerbosity())
+  {
+    std::clog << "Obtained " << all_items.size() << " focusable items" << '\n';
+  }
 
-  if (!items.empty())
+  if (items.empty())
+  {
+    if (q.GetVerbosity()) { std::clog << "No focusable items" << '\n'; }
+  }
+  else
   {
     static std::mt19937 rng_engine{0};
     std::uniform_int_distribution<int> distribution(0, static_cast<int>(items.size()) - 1);
     const int i{distribution(rng_engine)};
     assert(i >= 0);
     assert(i < items.size());
-    if (q.GetVerbosity()) { std::clog << "Giving the " << i << "th item focus" << std::endl; }
+    if (q.GetVerbosity()) { std::clog << "Giving the " << i << "th item focus" << '\n'; }
     auto& new_focus_item = items[i];
     assert(!new_focus_item->isSelected());
     new_focus_item->setSelected(true);
     new_focus_item->setFocus();
-  }
-  else
-  {
-    if (q.GetVerbosity()) { std::clog << "No focusable items" << std::endl; }
   }
 }
 

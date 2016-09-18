@@ -47,9 +47,6 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
     m_signal_request_quit{},
     m_signal_request_virtual_bastard{}
 {
-  #ifndef NDEBUG
-  Test();
-  #endif
   const double pi = boost::math::constants::pi<double>();
   {
     //Legend
@@ -372,15 +369,3 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::keyPressEvent(QKeyEvent *ev
   QtKeyboardFriendlyGraphicsView::keyPressEvent(event);
 }
 #pragma GCC diagnostic pop
-
-#ifndef NDEBUG
-void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::Test() noexcept
-{
-  {
-    static bool is_tested{false};
-    if (is_tested) return;
-    is_tested = true;
-  }
-  const TestTimer test_timer(__func__,__FILE__,1.0);
-}
-#endif

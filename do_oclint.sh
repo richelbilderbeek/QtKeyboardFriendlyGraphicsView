@@ -11,12 +11,13 @@ echo $h_files
   $cpp_files \
   $h_files \
   -- \
-  -c -std=c++14 -fPIC \
+  -c -std=c++11 -fPIC \
   -I../RibiClasses/CppAbout \
   -I../RibiClasses/CppContainer \
   -I../RibiClasses/CppFileIo \
   -I../RibiClasses/CppFuzzy_equal_to \
   -I../RibiClasses/CppGeometry \
+  -I../RibiClasses/CppHelp \
   -I../RibiClasses/CppMenuDialog \
   -I../RibiClasses/CppPlane \
   -I../RibiClasses/CppQtAboutDialog \
@@ -25,6 +26,7 @@ echo $h_files
   -I../RibiClasses/CppQtHideAndShowDialog \
   -I../RibiClasses/CppQtImage \
   -I../RibiClasses/CppQtLeftRightRectItem \
+  -I../RibiClasses/CppQtPathArrowItem \
   -I../RibiClasses/CppQtRoundedEditRectItem \
   -I../RibiClasses/CppQtRoundedRectItem \
   -I../RibiClasses/CppQtQuadBezierArrowItem \
