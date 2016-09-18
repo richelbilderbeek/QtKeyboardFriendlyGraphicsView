@@ -9,7 +9,10 @@
 
 QtKeyboardFriendlyGraphicsView is a Qt class for a keyboard-friendly QGraphicsView.
 
-## Build status of builds that QtKeyboardFriendlyGraphicsView relies on
+![Screenshot of tester](QtKeyboardFriendlyGraphicsView.png)
+
+## Build status of builds that QtKeyboardFriendlyGraphicsView partially relies on
 
  * [![Build Status](https://travis-ci.org/richelbilderbeek/RibiClasses.svg?branch=master)](https://travis-ci.org/richelbilderbeek/RibiClasses) [![codecov.io](https://codecov.io/github/richelbilderbeek/RibiClasses/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/RibiClasses?branch=master) [RibiClasses](https://github.com/richelbilderbeek/RibiClasses)
+
 
