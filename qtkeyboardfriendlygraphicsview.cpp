@@ -28,6 +28,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <random>
 #include <stdexcept>
+#include <QDebug>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QGraphicsSimpleTextItem>
@@ -438,10 +439,7 @@ std::vector<QGraphicsItem *> ribi::Look(
   return v;
 }
 
-
-void ribi::SetRandomFocus(
-  QtKeyboardFriendlyGraphicsView& q
-)
+void ribi::ReallyLoseFocus(QtKeyboardFriendlyGraphicsView& q) noexcept
 {
   if (QGraphicsItem* const item = q.GetScene().focusItem())
   {
@@ -453,6 +451,13 @@ void ribi::SetRandomFocus(
     item->clearFocus();
     item->setEnabled(true);
   }
+}
+
+void ribi::SetRandomFocus(
+  QtKeyboardFriendlyGraphicsView& q
+)
+{
+  ReallyLoseFocus(q);
 
   for (auto item: q.GetScene().selectedItems())
   {
