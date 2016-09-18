@@ -5,7 +5,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "qttestqtkeyboardfriendlygraphicsviewmenudialog.h"
-#include "trace.h"
 #pragma GCC diagnostic pop
 
 int main(int argc, char *argv[])
