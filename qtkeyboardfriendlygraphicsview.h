@@ -21,6 +21,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #ifndef QTKEYBOARDFRIENDLYGRAPHICSVIEW_H
 #define QTKEYBOARDFRIENDLYGRAPHICSVIEW_H
 
+#include <functional>
 #include <vector>
 #include <QGraphicsView>
 
@@ -39,15 +40,8 @@ struct QtKeyboardFriendlyGraphicsView : public QGraphicsView
   const QGraphicsScene& GetScene() const noexcept;
         QGraphicsScene& GetScene() noexcept;
 
-  bool GetVerbosity() const noexcept { return m_verbose; }
-
   ///Respond to a key press
   virtual void keyPressEvent(QKeyEvent *event) override;
-
-  void SetVerbosity(const bool verbosity) noexcept { m_verbose = verbosity; }
-
-  private:
-  bool m_verbose;
 };
 
 ///Obtain the closest item in the collection
@@ -74,8 +68,22 @@ QGraphicsItem * GetClosestNonselectedItem(
   const Direction direction
 );
 
+std::function<bool(const double, const double)> GetLooseSearchFunction(
+  const Direction direction
+) noexcept;
+
+std::vector<QGraphicsItem *> GetNonSelectedNonFocusItems(
+  const QtKeyboardFriendlyGraphicsView& q
+) noexcept;
+
 std::string GetQtKeyboardFriendlyGraphicsViewVersion() noexcept;
 std::vector<std::string> GetQtKeyboardFriendlyGraphicsViewVersionHistory() noexcept;
+
+QList<QGraphicsItem *> GetSelectableVisibleItems(const QGraphicsScene& s) noexcept;
+
+std::function<bool(const double, const double)> GetStrictSearchFunction(
+  const Direction direction
+) noexcept;
 
 void KeyPressEventCtrl(
   QtKeyboardFriendlyGraphicsView& q,
@@ -87,10 +95,20 @@ void KeyPressEventNoModifiers(
   QKeyEvent *event
 ) noexcept;
 
+void KeyPressEventNoModifiersArrowKey(
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent *event
+) noexcept;
+
 void KeyPressEventShift(
   QtKeyboardFriendlyGraphicsView& q,
   QKeyEvent *event
 ) noexcept;
+
+std::vector<QGraphicsItem *> Look(
+  const QtKeyboardFriendlyGraphicsView& q,
+  const std::function<bool(const double, const double)>& f
+);
 
 ///Give focus to a random item
 void SetRandomFocus(

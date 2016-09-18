@@ -1,10 +1,8 @@
 #!/bin/bash
 
-cpp_files=`ls *.cpp | egrep -v "^qrc_.*\.cpp$" | egrep -v "^moc_.*\.cpp$" | egrep -v "^.*_test\.cpp$" | egrep -v "^.*_test\.cpp$"`
-h_files=`ls *.h | egrep -v "^ui_.*\.h$" | egrep -v "^.*_test\.h$"`
+cpp_files=`ls *.cpp | egrep -v "^qrc_.*\.cpp$" | egrep -v "^moc_.*\.cpp$" | egrep -v "^.*_test\.cpp$" | egrep -v "^.*_test\.cpp$" | egrep -v "^qttest.*\.cpp$"`
+h_files=`ls *.h | egrep -v "^ui_.*\.h$" | egrep -v "^.*_test\.h$" | egrep -v "^qttest.*\.h$"`
 
-echo $cpp_files
-echo $h_files
 
 ./oclint-0.10.3/bin/oclint -o oclint.log \
   -disable-rule ShortVariableName \

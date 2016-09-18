@@ -3,14 +3,16 @@ CONFIG += debug_and_release
 # Qt does not go well with -Weffc++
 include(../RibiLibraries/DesktopApplicationNoWeffcpp.pri)
 
-include(../RibiLibraries/GeneralConsole.pri)
+include(../RibiClasses/CppAbout/CppAbout.pri)
+include(../RibiClasses/CppFileIo/CppFileIo.pri)
+include(../RibiClasses/CppHelp/CppHelp.pri)
+include(../RibiClasses/CppMenuDialog/CppMenuDialog.pri)
+
 include(../RibiLibraries/Apfloat.pri)
 
 # Do not test console classes
 include(../RibiClasses/CppContainer/CppContainer.pri)
 include(../RibiClasses/CppCounter/CppCounter.pri)
-#include(../ConceptMap/ConceptMap.pri)
-#include(../RibiClasses/CppDnaSequence/CppDnaSequence.pri)
 include(../RibiClasses/CppGeometry/CppGeometry.pri)
 include(../RibiClasses/CppFuzzy_equal_to/CppFuzzy_equal_to.pri)
 include(../RibiClasses/CppPlane/CppPlane.pri)
@@ -19,7 +21,6 @@ include(../RibiClasses/CppRibiRegex/CppRibiRegex.pri)
 include(../RibiClasses/CppRibiSystem/CppRibiSystem.pri)
 include(../RibiClasses/CppRibiTime/CppRibiTime.pri)
 include(../RibiClasses/CppStopwatch/CppStopwatch.pri)
-#include(../RibiClasses/CppXml/CppXml.pri)
 
 # Desktop classes
 include(../RibiClasses/CppGrabber/CppGrabber.pri)

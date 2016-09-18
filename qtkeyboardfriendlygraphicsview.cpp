@@ -27,18 +27,17 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <functional>
 #include <iostream>
 #include <random>
+#include <stdexcept>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QGraphicsSimpleTextItem>
 
 #include "container.h"
-#include "trace.h"
 
 #pragma GCC diagnostic pop
 
 ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* parent)
-  : QGraphicsView(new QGraphicsScene,parent),
-    m_verbose{false}
+  : QGraphicsView(new QGraphicsScene,parent)
 {
   assert(scene());
 }
@@ -105,19 +104,6 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
     default:
       return nullptr;
   }
-  if (cnsi) {
-    if (q.GetVerbosity()) {
-      std::stringstream s;
-      s << "Found a nonselected item with tooltip " << cnsi->toolTip().toStdString();
-      TRACE(s.str());
-    }
-  }
-  else {
-    assert(!cnsi);
-    if (q.GetVerbosity()) {
-      TRACE("Did not find a nonselected item");
-    }
-  }
   return cnsi;
 }
 
@@ -127,120 +113,14 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
   const Direction direction
 )
 {
-  const auto f_loose_above  = [](const double /* dx */, const double dy) { return dy < 0.0; };
-  const auto f_strict_above = [](const double dx, const double dy)
-  {
-    return dy < 0.0 && std::abs(dx) < std::abs(dy);
-  };
+  std::vector<QGraphicsItem *> v = Look(q, GetStrictSearchFunction(direction));
 
-  const auto f_loose_below  = [](const double /* dx */, const double dy) { return dy > 0.0; };
-  const auto f_strict_below = [](const double dx, const double dy)
-  {
-    return dx > 0.0 && std::abs(dx) < std::abs(dy);
-  };
-
-  const auto f_loose_left  = [](const double dx, const double /* dy */) { return dx < 0.0; };
-  const auto f_strict_left = [](const double dx, const double dy)
-  {
-    return dx < 0.0 && std::abs(dy) < std::abs(dx);
-  };
-
-  const auto f_loose_right  = [](const double dx, const double /* dy */) { return dx > 0.0; };
-  const auto f_strict_right = [](const double dx, const double dy)
-  {
-    return dx > 0.0 && std::abs(dy) < std::abs(dx);
-  };
-
-  using Function = std::function<bool(const double, const double)>;
-  Function my_function_loose  = f_loose_above;
-  Function my_function_strict = f_strict_above;
-
-  switch (direction)
-  {
-    case Direction::above:
-      my_function_loose = f_loose_above;
-      my_function_strict = f_strict_above;
-      break;
-    case Direction::below:
-      my_function_loose = f_loose_below;
-      my_function_strict = f_strict_below;
-      break;
-    case Direction::left:
-      my_function_loose = f_loose_left;
-      my_function_strict = f_strict_left;
-      break;
-    case Direction::right:
-      my_function_loose = f_loose_right;
-      my_function_strict = f_strict_right;
-      break;
-  }
-
-  std::vector<QGraphicsItem *> v;
-  const QList<QGraphicsItem *> all_items = q.items();
-  std::vector<QGraphicsItem *> nonselected_items;
-  std::copy_if(all_items.begin(),all_items.end(),std::back_inserter(nonselected_items),
-    [](const QGraphicsItem * const item) { return !item->isSelected(); }
-  );
-  //Remove the focus item
-  nonselected_items.erase(
-    std::remove(
-      std::begin(nonselected_items),
-      std::end(nonselected_items),
-      focus_item),
-    std::end(nonselected_items)
-  );
-  assert(std::count(std::begin(nonselected_items),std::end(nonselected_items),focus_item) == 0);
-  if (q.GetVerbosity()) {
-    std::stringstream s;
-    s << "Finding the best item between " << nonselected_items.size() << " non-selected items";
-    TRACE(s.str());
-  }
-
-  //Look for strict items
-  for(QGraphicsItem* const item: nonselected_items)
-  {
-    const double dx = item->pos().x() - focus_item->pos().x();
-    const double dy = item->pos().y() - focus_item->pos().y();
-    if (my_function_strict(dx,dy))
-    {
-      assert(item != focus_item);
-      if (!item->isSelected()) { v.push_back(item); }
-    }
-  }
-  if (q.GetVerbosity()) {
-    std::stringstream s;
-    s << "Using a strict comparison " << v.size() << " non-selected items were found";
-    TRACE(s.str());
-  }
   //If nothing found, look more loosely
   if (v.empty())
   {
-
-    for(QGraphicsItem* const item: nonselected_items)
-    {
-      const double dx = item->pos().x() - focus_item->pos().x();
-      const double dy = item->pos().y() - focus_item->pos().y();
-      if (my_function_loose(dx,dy))
-      {
-        assert(item != focus_item);
-        if (!item->isSelected()) { v.push_back(item); }
-      }
-    }
-    if (q.GetVerbosity())
-    {
-      std::stringstream s;
-      s << "Using a loose comparison " << v.size() << " non-selected items were found";
-      TRACE(s.str());
-    }
-
+    v = Look(q, GetLooseSearchFunction(direction));
   }
   if (v.empty()) return nullptr;
-
-  if (q.GetVerbosity()) {
-    std::stringstream s;
-    s << "Selecting the closest out of " << v.size() << " items";
-    TRACE(s.str());
-  }
 
   assert(Container().AllUnique(v));
   QGraphicsItem * const closest_item = GetClosest(focus_item,v);
@@ -248,6 +128,58 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
   assert(closest_item != focus_item);
   assert(!closest_item->isSelected());
   return closest_item;
+}
+
+std::function<bool(const double, const double)> ribi::GetLooseSearchFunction(
+  const Direction direction
+) noexcept
+{
+  const auto f_loose_above  = [](const double /* dx */, const double dy) { return dy < 0.0; };
+  const auto f_loose_below  = [](const double /* dx */, const double dy) { return dy > 0.0; };
+  const auto f_loose_left  = [](const double dx, const double /* dy */) { return dx < 0.0; };
+  const auto f_loose_right  = [](const double dx, const double /* dy */) { return dx > 0.0; };
+
+  switch (direction)
+  {
+    case Direction::above: return f_loose_above;
+    case Direction::below: return f_loose_below;
+    case Direction::left: return f_loose_left;
+    case Direction::right: return f_loose_right;
+  }
+  throw std::logic_error("Cannot get here");
+}
+
+std::vector<QGraphicsItem *> ribi::GetNonSelectedNonFocusItems(
+  const QtKeyboardFriendlyGraphicsView& q
+) noexcept
+{
+  const QList<QGraphicsItem *> all_items = q.items();
+
+  std::vector<QGraphicsItem *> nonselected_items;
+  std::copy_if(
+    std::begin(all_items),
+    std::end(all_items),
+    std::back_inserter(nonselected_items),
+    [](const QGraphicsItem * const item) { return !item->isSelected(); }
+  );
+  //Remove the focus item
+  nonselected_items.erase(
+    std::remove(
+      std::begin(nonselected_items),
+      std::end(nonselected_items),
+      q.GetScene().focusItem()
+    ),
+    std::end(nonselected_items)
+  );
+  assert(
+    std::count(
+      std::begin(nonselected_items),
+      std::end(nonselected_items),
+      q.GetScene().focusItem()
+    )
+    == 0
+  );
+  return nonselected_items;
 }
 
 QGraphicsScene& ribi::QtKeyboardFriendlyGraphicsView::GetScene() noexcept
@@ -261,6 +193,7 @@ const QGraphicsScene& ribi::QtKeyboardFriendlyGraphicsView::GetScene() const noe
   assert(scene());
   return *scene();
 }
+
 
 std::string ribi::GetQtKeyboardFriendlyGraphicsViewVersion() noexcept
 {
@@ -279,18 +212,60 @@ std::vector<std::string> ribi::GetQtKeyboardFriendlyGraphicsViewVersionHistory()
   };
 }
 
+QList<QGraphicsItem *> ribi::GetSelectableVisibleItems(const QGraphicsScene& s) noexcept
+{
+  const auto all_items = s.items();
+  QList<QGraphicsItem *> items;
+  std::copy_if(all_items.begin(),all_items.end(),std::back_inserter(items),
+    [](const QGraphicsItem* const item)
+    {
+      return (item->flags() & QGraphicsItem::ItemIsSelectable)
+        && item->isVisible();
+    }
+  );
+  return items;
+}
+
+std::function<bool(const double, const double)> ribi::GetStrictSearchFunction(
+  const Direction direction
+) noexcept
+{
+  const auto f_strict_above = [](const double dx, const double dy)
+  {
+    return dy < 0.0 && std::abs(dx) < std::abs(dy);
+  };
+  const auto f_strict_below = [](const double dx, const double dy)
+  {
+    return dx > 0.0 && std::abs(dx) < std::abs(dy);
+  };
+  const auto f_strict_left = [](const double dx, const double dy)
+  {
+    return dx < 0.0 && std::abs(dy) < std::abs(dx);
+  };
+  const auto f_strict_right = [](const double dx, const double dy)
+  {
+    return dx > 0.0 && std::abs(dy) < std::abs(dx);
+  };
+
+  switch (direction)
+  {
+    case Direction::above: return f_strict_above;
+    case Direction::below: return f_strict_below;
+    case Direction::left: return f_strict_left;
+    case Direction::right: return f_strict_right;
+  }
+  throw std::logic_error("Cannot get here");
+}
+
 void ribi::QtKeyboardFriendlyGraphicsView::keyPressEvent(QKeyEvent *event)
 {
   if (event->modifiers() & Qt::ControlModifier) {
-    if (this->GetVerbosity()) { std::clog << "Key event using CTRL" << '\n'; }
     KeyPressEventCtrl(*this, event);
   }
   else if (event->modifiers() & Qt::ShiftModifier) {
-    if (this->GetVerbosity()) { std::clog << "Key event using SHIFT" << '\n'; }
     KeyPressEventShift(*this, event);
   }
   else {
-    if (this->GetVerbosity()) { std::clog << "Key event without CTRL nor SHIFT" << '\n'; }
     KeyPressEventNoModifiers(*this, event);
   }
 
@@ -307,31 +282,25 @@ void ribi::KeyPressEventCtrl(
   //Do special movements
   if (event->key() == Qt::Key_Space)
   {
-    if (q.GetVerbosity()) { std::clog << "Pressing CTRL-Space" << '\n'; }
     SetRandomSelectedness(q);
     return;
   }
 
 
-  if (q.GetVerbosity()) { std::clog << "CTRL pressed: try to move items" << '\n'; }
   double delta_x{0.0};
   double delta_y{0.0};
   switch (event->key())
   {
     case Qt::Key_Up:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) up" << '\n'; }
       delta_y = -10.0;
       break;
     case Qt::Key_Right:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) right" << '\n'; }
       delta_x =  10.0;
       break;
     case Qt::Key_Down:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) down" << '\n'; }
       delta_y =  10.0;
       break;
     case Qt::Key_Left:
-      if (q.GetVerbosity()) { std::clog << "Moving selected item (s) left" << '\n'; }
       delta_x = -10.0;
       break;
     default:
@@ -354,42 +323,39 @@ void ribi::KeyPressEventNoModifiers(
   assert(!(event->modifiers() & Qt::ShiftModifier));
   assert(!(event->modifiers() & Qt::ControlModifier));
 
-  //Do special movements
-  if (event->key() == Qt::Key_Space)
+  switch (event->key())
   {
-    SetRandomFocus(q); //If you want to select a random item, use CTRL-space
-    return;
+    case Qt::Key_Space:
+      SetRandomFocus(q); //If you want to select a random item, use CTRL-space
+      return;
+    case Qt::Key_Up:
+    case Qt::Key_Right:
+    case Qt::Key_Left:
+    case Qt::Key_Down:
+      KeyPressEventNoModifiersArrowKey(q, event);
+      return;
+    default: return;
   }
+}
 
+void ribi::KeyPressEventNoModifiersArrowKey(
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent *event
+) noexcept
+{
   QGraphicsItem* const current_focus_item = q.GetScene().focusItem(); //Can be nullptr
   if (!current_focus_item) {
-    if (q.GetVerbosity())
-    {
-      std::clog << "Cannot tranfer selectedness when there is no focus" << '\n';
-    }
     return;
   }
 
-  const std::set<int> keys = { Qt::Key_Up, Qt::Key_Right, Qt::Key_Left, Qt::Key_Down };
-  if (keys.count(event->key()) == 0) {
-    if (q.GetVerbosity()) { std::clog << "Do only movements here" << '\n'; }
-    return;
-  }
-
-  assert(current_focus_item);
   QGraphicsItem * const nsi // new_selected_item
     = GetClosestNonselectedItem(q, current_focus_item,event->key());
   assert(nsi != current_focus_item);
 
   //Unselect currently selected
-  const auto current_selected_items = q.GetScene().selectedItems();
-  if (q.GetVerbosity())
+  const auto csi = q.GetScene().selectedItems(); //current_selected_items
+  for (const auto item: csi)
   {
-    std::clog << "Unselecting " << current_selected_items.size() << " items " << '\n';
-  }
-  for (const auto item: current_selected_items)
-  {
-    if (q.GetVerbosity()) { std::clog << "Unselect: " << item->toolTip().toStdString() << '\n'; }
     assert(item->isSelected());
     item->setSelected(false);
   }
@@ -397,7 +363,6 @@ void ribi::KeyPressEventNoModifiers(
   //Select newly selected
   if (nsi)
   {
-    if (q.GetVerbosity()) { std::clog << "Select: " << nsi->toolTip().toStdString() << '\n'; }
     assert(!nsi->isSelected());
     nsi->setSelected(true);
   }
@@ -414,23 +379,19 @@ void ribi::KeyPressEventShift(
   QKeyEvent *event
 ) noexcept
 {
+  assert(event->modifiers() & Qt::ShiftModifier);
+
   const std::set<int> keys_accepted = { Qt::Key_Up, Qt::Key_Right, Qt::Key_Down, Qt::Key_Left };
   if (keys_accepted.count(event->key()) == 0)
   {
-    if (q.GetVerbosity())
-    {
-      std::clog << "SHIFT pressed with unaccepted key" << '\n';
-    }
     return;
   }
 
   //Add selectedness to items
-  assert(event->modifiers() & Qt::ShiftModifier);
   //Can be nullptr
   QGraphicsItem* const current_focus_item = q.GetScene().focusItem();
   if (!current_focus_item)
   {
-    if (q.GetVerbosity()) { std::clog << "Cannot add items without a focus" << '\n'; }
     return;
   }
 
@@ -442,11 +403,6 @@ void ribi::KeyPressEventShift(
   //Add selectedness
   if (nasi)
   {
-    if (q.GetVerbosity())
-    {
-      std::clog << "Add select: " << nasi->toolTip().toStdString() << '\n';
-    }
-    assert(nasi);
     assert(!nasi->isSelected());
     nasi->setSelected(true);
   }
@@ -458,6 +414,31 @@ void ribi::KeyPressEventShift(
   q.GetScene().update();
 }
 
+std::vector<QGraphicsItem *> ribi::Look(
+  const QtKeyboardFriendlyGraphicsView& q,
+  const std::function<bool(const double, const double)>& f
+)
+{
+  const std::vector<QGraphicsItem *> nonselected_items{
+    GetNonSelectedNonFocusItems(q)
+  };
+
+  std::vector<QGraphicsItem *> v;
+  for(QGraphicsItem* const item: nonselected_items)
+  {
+    const auto focus_item = q.GetScene().focusItem();
+    const double dx = item->pos().x() - focus_item->pos().x();
+    const double dy = item->pos().y() - focus_item->pos().y();
+    if (f(dx,dy))
+    {
+      assert(item != focus_item);
+      if (!item->isSelected()) { v.push_back(item); }
+    }
+  }
+  return v;
+}
+
+
 void ribi::SetRandomFocus(
   QtKeyboardFriendlyGraphicsView& q
 )
@@ -465,7 +446,6 @@ void ribi::SetRandomFocus(
   if (QGraphicsItem* const item = q.GetScene().focusItem())
   {
     assert(item);
-    if (q.GetVerbosity()) { std::clog << "Removing current focus" << '\n'; }
     //Really lose focus
     item->setEnabled(false);
     //assert(item->isSelected()); //Not true
@@ -473,16 +453,7 @@ void ribi::SetRandomFocus(
     item->clearFocus();
     item->setEnabled(true);
   }
-  else
-  {
-    if (q.GetVerbosity()) { std::clog << "No focused item to remove focus of" << '\n'; }
-  }
 
-  if (q.GetVerbosity())
-  {
-    std::clog << "Remove selectedness of all " << q.GetScene().selectedItems().size()
-      << " selected items" << '\n';
-  }
   for (auto item: q.GetScene().selectedItems())
   {
     assert(item->isSelected());
@@ -500,23 +471,13 @@ void ribi::SetRandomFocus(
         && item->isVisible();
     }
   );
-  if (q.GetVerbosity())
-  {
-    std::clog << "Obtained " << all_items.size() << " focusable items" << '\n';
-  }
-
-  if (items.empty())
-  {
-    if (q.GetVerbosity()) { std::clog << "No focusable items" << '\n'; }
-  }
-  else
+  if (!items.empty())
   {
     static std::mt19937 rng_engine{0};
     std::uniform_int_distribution<int> distribution(0, static_cast<int>(items.size()) - 1);
     const int i{distribution(rng_engine)};
     assert(i >= 0);
     assert(i < items.size());
-    if (q.GetVerbosity()) { std::clog << "Giving the " << i << "th item focus" << '\n'; }
     auto& new_focus_item = items[i];
     assert(!new_focus_item->isSelected());
     new_focus_item->setSelected(true);
@@ -542,15 +503,8 @@ void ribi::SetRandomSelectedness(
   }
 
   //Choose a random item visible item to receive selectedness
-  const auto all_items = q.GetScene().items();
-  QList<QGraphicsItem *> items;
-  std::copy_if(all_items.begin(),all_items.end(),std::back_inserter(items),
-    [](const QGraphicsItem* const item)
-    {
-      return (item->flags() & QGraphicsItem::ItemIsSelectable)
-        && item->isVisible();
-    }
-  );
+  const QList<QGraphicsItem *> items = GetSelectableVisibleItems(q.GetScene());
+
   assert(q.GetScene().selectedItems().size() == 0);
   if (!items.empty())
   {

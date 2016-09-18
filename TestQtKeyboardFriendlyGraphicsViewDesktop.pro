@@ -2,7 +2,11 @@ CONFIG += debug_and_release
 
 include(../RibiLibraries/DesktopApplicationNoWeffcpp.pri)
 
-include(../RibiLibraries/GeneralConsole.pri)
+include(../RibiClasses/CppAbout/CppAbout.pri)
+include(../RibiClasses/CppFileIo/CppFileIo.pri)
+include(../RibiClasses/CppHelp/CppHelp.pri)
+include(../RibiClasses/CppMenuDialog/CppMenuDialog.pri)
+
 include(../RibiLibraries/GeneralDesktop.pri)
 include(../RibiLibraries/Apfloat.pri)
 include(../RibiLibraries/BoostAll.pri)

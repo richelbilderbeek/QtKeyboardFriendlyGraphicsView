@@ -1,0 +1,23 @@
+
+Compiler Warnings:
+
+/usr/include/qt4/QtCore/qmetatype.h:256:5: 'register' storage class specifier is deprecated and incompatible with C++1z
+/usr/include/qt4/QtCore/qsharedpointer_impl.h:435:17: 'register' storage class specifier is deprecated and incompatible with C++1z
+/usr/include/qt4/QtCore/qsharedpointer_impl.h:822:5: 'register' storage class specifier is deprecated and incompatible with C++1z
+/usr/include/qt4/QtCore/qsharedpointer_impl.h:834:5: 'register' storage class specifier is deprecated and incompatible with C++1z
+/usr/include/qt4/QtCore/qsharedpointer_impl.h:848:5: 'register' storage class specifier is deprecated and incompatible with C++1z
+/usr/include/qt4/QtCore/qsharedpointer_impl.h:868:5: 'register' storage class specifier is deprecated and incompatible with C++1z
+/home/p230198/GitHubs/QtKeyboardFriendlyGraphicsView/qtmain.cpp:4:32: unknown warning group '-Wunused-but-set-parameter', ignored
+../RibiClasses/CppQtHideAndShowDialog/qthideandshowdialog.h:27:32: unknown warning group '-Wunused-but-set-parameter', ignored
+:37:3: 'metaObject' overrides a member function but is not marked 'override'
+:37:3: 'qt_metacast' overrides a member function but is not marked 'override'
+:37:3: 'qt_metacall' overrides a member function but is not marked 'override'
+../RibiClasses/CppMenuDialog/menudialog.h:30:32: unknown warning group '-Wunused-but-set-parameter', ignored
+
+
+OCLint Report
+
+Summary: TotalFiles=6 FilesWithViolations=0 P1=0 P2=0 P3=0 
+
+
+[OCLint (http://oclint.org) v0.10.3]

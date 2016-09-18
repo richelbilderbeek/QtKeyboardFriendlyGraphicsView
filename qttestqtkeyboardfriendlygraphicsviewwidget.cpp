@@ -36,10 +36,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "qtleftrightrectitem.h"
 #include "qtroundedrectitem.h"
 #include "qtpatharrowitem.h"
-#include "testtimer.h"
 #include "qtroundededitrectitem.h"
 #include "qtquadbezierarrowitem.h"
-#include "trace.h"
 #pragma GCC diagnostic pop
 
 ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsViewWidget()
@@ -346,8 +344,6 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
       scene()->addItem(item);
     }
   }
-
-  this->SetVerbosity(true);
 }
 
 void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::DoUpdateScene()
