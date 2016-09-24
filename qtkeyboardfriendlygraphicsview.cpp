@@ -195,7 +195,6 @@ const QGraphicsScene& ribi::QtKeyboardFriendlyGraphicsView::GetScene() const noe
   return *scene();
 }
 
-
 std::string ribi::GetQtKeyboardFriendlyGraphicsViewVersion() noexcept
 {
   return "1.4";
@@ -366,12 +365,19 @@ void ribi::KeyPressEventNoModifiersArrowKey(
   {
     assert(!nsi->isSelected());
     nsi->setSelected(true);
+    if (!nsi->isSelected())
+    {
+      qDebug() << "Warning: nsi not selected";
+    }
   }
   //Transfer focus
   current_focus_item->clearFocus();
   if (nsi) {
-    assert(nsi->isSelected());
     nsi->setFocus();
+    if (!nsi->hasFocus())
+    {
+      qDebug() << "Warning: nsi has not received focus";
+    }
   }
 }
 
@@ -469,10 +475,11 @@ void ribi::SetRandomFocus(
   //Let a random item receive focus
   const QList<QGraphicsItem *> all_items = q.items();
   QList<QGraphicsItem *> items;
-  std::copy_if(all_items.begin(),all_items.end(),std::back_inserter(items),
+  std::copy_if(std::begin(all_items),std::end(all_items),std::back_inserter(items),
     [](const QGraphicsItem* const item)
     {
       return (item->flags() & QGraphicsItem::ItemIsFocusable)
+        && (item->flags() & QGraphicsItem::ItemIsSelectable)
         && item->isVisible();
     }
   );
@@ -487,6 +494,15 @@ void ribi::SetRandomFocus(
     assert(!new_focus_item->isSelected());
     new_focus_item->setSelected(true);
     new_focus_item->setFocus();
+    q.update();
+    if (!new_focus_item->isSelected())
+    {
+      qDebug() << "Warning: setSelected did not select the item";
+    }
+    if (!new_focus_item->hasFocus())
+    {
+      qDebug() << "Warning: setFocus did not set focus to the item";
+    }
   }
 }
 

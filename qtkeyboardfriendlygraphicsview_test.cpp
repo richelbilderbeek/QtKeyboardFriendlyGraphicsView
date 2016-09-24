@@ -29,10 +29,8 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QVERIFY(view.scene()->selectedItems().size() == 2);
   for (int i=0; i!=100; ++i) //Very often
   {
+    QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier);
     view.show();
-    QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier, 10);
-    view.show();
-    qApp->processEvents();
     QVERIFY(view.scene()->selectedItems().size() == 1);
   }
 }
@@ -58,9 +56,12 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   item2->setSelected(false);
   view.show();
   QVERIFY(view.scene()->selectedItems().empty());
-  QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier, 100);
-  view.show();
-  QVERIFY(view.scene()->selectedItems().size() == 1);
+  for (int i=0; i!=100; ++i) //Very often
+  {
+    QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier);
+    view.show();
+    QVERIFY(view.scene()->selectedItems().size() == 1);
+  }
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test::key_left_selects_an_item_at_the_left()
