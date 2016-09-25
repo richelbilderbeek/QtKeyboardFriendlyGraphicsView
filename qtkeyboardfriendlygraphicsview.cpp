@@ -43,6 +43,30 @@ ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* pa
   assert(scene());
 }
 
+void ribi::DoSelect(QGraphicsItem * const nsi)
+{
+  if (nsi)
+  {
+    assert(!nsi->isSelected());
+    nsi->setSelected(true);
+    if (!nsi->isSelected())
+    {
+      qDebug() << "Warning: nsi not selected";
+    }
+  }
+}
+
+void ribi::DoFocus(QGraphicsItem * const nsi)
+{
+  if (nsi) {
+    nsi->setFocus();
+    if (!nsi->hasFocus())
+    {
+      qDebug() << "Warning: nsi has not received focus";
+    }
+  }
+}
+
 QGraphicsItem* ribi::GetClosest(
   const QGraphicsItem* const focus_item,
   const std::vector<QGraphicsItem *>& items) noexcept
@@ -360,25 +384,12 @@ void ribi::KeyPressEventNoModifiersArrowKey(
     item->setSelected(false);
   }
   assert(!current_focus_item->isSelected() && "Focus item must have lost focus now");
+
   //Select newly selected
-  if (nsi)
-  {
-    assert(!nsi->isSelected());
-    nsi->setSelected(true);
-    if (!nsi->isSelected())
-    {
-      qDebug() << "Warning: nsi not selected";
-    }
-  }
+  DoSelect(nsi);
   //Transfer focus
   current_focus_item->clearFocus();
-  if (nsi) {
-    nsi->setFocus();
-    if (!nsi->hasFocus())
-    {
-      qDebug() << "Warning: nsi has not received focus";
-    }
-  }
+  DoFocus(nsi);
 }
 
 void ribi::KeyPressEventShift(

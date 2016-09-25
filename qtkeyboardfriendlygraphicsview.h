@@ -44,6 +44,10 @@ struct QtKeyboardFriendlyGraphicsView : public QGraphicsView
   virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
+void DoFocus(QGraphicsItem * const nsi);
+
+void DoSelect(QGraphicsItem * const nsi);
+
 ///Obtain the closest item in the collection
 ///Returns nullptr if there is no focusable item in the items
 QGraphicsItem* GetClosest(
