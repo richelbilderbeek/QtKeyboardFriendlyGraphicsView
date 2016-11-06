@@ -4,7 +4,7 @@
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 #include <QApplication>
 #include <QDesktopWidget>
-#include "qttestqtkeyboardfriendlygraphicsviewmenudialog.h"
+#include "qtkeyboardfriendlygraphicsviewdemomenudialog.h"
 #pragma GCC diagnostic pop
 
 int main(int argc, char *argv[])

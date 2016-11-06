@@ -24,12 +24,12 @@ include(../RibiClasses/CppGrabber/CppGrabber.pri)
 include(../RibiClasses/CppQtArrowItem/CppQtArrowItem.pri)
 include(../RibiClasses/CppQtDisplayPosItem/CppQtDisplayPosItem.pri)
 include(QtKeyboardFriendlyGraphicsView.pri)
+include(QtKeyboardFriendlyGraphicsViewDemoDesktop.pri)
 include(../RibiClasses/CppQtLeftRightRectItem/CppQtLeftRightRectItem.pri)
 include(../RibiClasses/CppQtPathArrowItem/CppQtPathArrowItem.pri)
 include(../RibiClasses/CppQtQuadBezierArrowItem/CppQtQuadBezierArrowItem.pri)
 include(../RibiClasses/CppQtRoundedEditRectItem/CppQtRoundedEditRectItem.pri)
 include(../RibiClasses/CppQtRoundedRectItem/CppQtRoundedRectItem.pri)
 
-include(TestQtKeyboardFriendlyGraphicsViewDesktop.pri)
 
 SOURCES += qtmain.cpp
