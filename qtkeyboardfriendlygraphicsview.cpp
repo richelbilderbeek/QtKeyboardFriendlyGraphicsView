@@ -292,7 +292,8 @@ void ribi::QtKeyboardFriendlyGraphicsView::keyPressEvent(QKeyEvent *event)
   else {
     KeyPressEventNoModifiers(*this, event);
   }
-
+  this->repaint();
+  this->update();
 }
 
 void ribi::KeyPressEventCtrl(

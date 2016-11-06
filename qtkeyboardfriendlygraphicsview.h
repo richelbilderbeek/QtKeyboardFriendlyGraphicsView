@@ -32,7 +32,10 @@ namespace ribi {
 ///The widget holding the items
 struct QtKeyboardFriendlyGraphicsView : public QGraphicsView
 {
-  QtKeyboardFriendlyGraphicsView(QWidget* parent = 0);
+  Q_OBJECT //!OCLINT
+
+public:
+  explicit QtKeyboardFriendlyGraphicsView(QWidget* parent = 0);
 
   virtual ~QtKeyboardFriendlyGraphicsView() noexcept {}
 
