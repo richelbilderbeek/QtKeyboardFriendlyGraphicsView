@@ -30,9 +30,17 @@ before_script:
 
 script: 
   - ./install_githubs.sh
-  - ./build_demo.sh
-  - ./build_test.sh
+  # Build and run test
+  - qmake QtKeyboardFriendlyGraphicsViewTest.pro
+  - make debug
   - ./QtKeyboardFriendlyGraphicsViewTest
+  # Build and run and kill demo
+  - qmake QtKeyboardFriendlyGraphicsViewDemoDesktop.pro
+  - make debug
+  - ./QtKeyboardFriendlyGraphicsViewDemoDesktop &
+  - sleep 10
+  - sudo killall -9 QtKeyboardFriendlyGraphicsViewDemoDesktop
+  # Code coverage
   - ./get_code_cov.sh
   - codecov
   - ./do_oclint.sh
