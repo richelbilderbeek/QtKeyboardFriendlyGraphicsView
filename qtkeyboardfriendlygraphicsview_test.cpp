@@ -29,7 +29,7 @@ void ribi::qtkeyboardfriendlygraphicsview_test
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test
-  ::space_selects_one_random_item_when_two_were_selected()
+  ::ctrl_space_selects_one_random_item_when_two_were_selected()
 {
   QtKeyboardFriendlyGraphicsView view;
   QGraphicsRectItem * const item1{new QGraphicsRectItem};
@@ -52,7 +52,7 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QVERIFY(view.scene()->selectedItems().size() == 2);
   for (int i=0; i!=100; ++i) //Very often
   {
-    QKeyEvent e(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Space, Qt::ControlModifier);
     view.keyPressEvent(&e);
     //QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier);
 
@@ -64,7 +64,7 @@ void ribi::qtkeyboardfriendlygraphicsview_test
 
 
 void ribi::qtkeyboardfriendlygraphicsview_test
-  ::space_selects_one_random_item_when_zero_were_selected()
+  ::ctrl_space_selects_one_random_item_when_zero_were_selected()
 {
   QtKeyboardFriendlyGraphicsView view;
   QGraphicsRectItem * const item1{new QGraphicsRectItem};
@@ -85,11 +85,17 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QVERIFY(view.scene()->selectedItems().empty());
   for (int i=0; i!=100; ++i) //Very often
   {
-    QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier);
+    QTest::keyClick(&view, Qt::Key_Space, Qt::ControlModifier);
     view.show();
     QVERIFY(view.scene()->selectedItems().size() == 1);
   }
 }
+
+
+
+
+
+
 
 void ribi::qtkeyboardfriendlygraphicsview_test::key_left_selects_an_item_at_the_left()
 {
@@ -197,6 +203,35 @@ void ribi::qtkeyboardfriendlygraphicsview_test
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_ctrl_nonsense_is_rejected()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  view.scene()->addItem(item1);
+  QKeyEvent e(QEvent::KeyPress, Qt::Key_F6, Qt::ControlModifier);
+  view.keyPressEvent(&e);
+  QVERIFY(!e.isAccepted());
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_ctrl_space_is_accepted()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  view.scene()->addItem(item1);
+  QKeyEvent e(QEvent::KeyPress, Qt::Key_Space, Qt::ControlModifier);
+  view.keyPressEvent(&e);
+  QVERIFY(e.isAccepted());
+}
+
+
+void ribi::qtkeyboardfriendlygraphicsview_test
   ::press_space_is_accepted()
 {
   QtKeyboardFriendlyGraphicsView view;
@@ -222,6 +257,69 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QKeyEvent e(QEvent::KeyPress, Qt::Key_F6, Qt::NoModifier);
   view.keyPressEvent(&e);
   QVERIFY(!e.isAccepted());
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::space_selects_one_random_item_when_two_were_selected()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  QGraphicsRectItem * const item2{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item2->setToolTip("Item2");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item2->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  item2->setFlag(QGraphicsItem::ItemIsSelectable);
+  view.scene()->addItem(item1);
+  view.scene()->addItem(item2);
+  view.show();
+  view.setGeometry(0,0,300,300);
+  item1->clearFocus();
+  item2->clearFocus();
+  item1->setSelected(true);
+  item2->setSelected(true);
+  view.show();
+  QVERIFY(view.scene()->selectedItems().size() == 2);
+  for (int i=0; i!=100; ++i) //Very often
+  {
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    view.keyPressEvent(&e);
+    //QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier);
+
+    view.show();
+    QVERIFY(view.scene()->selectedItems().size() == 1);
+    QVERIFY(e.isAccepted());
+  }
+}
+
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::space_selects_one_random_item_when_zero_were_selected()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  QGraphicsRectItem * const item2{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item2->setToolTip("Item2");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item2->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  item2->setFlag(QGraphicsItem::ItemIsSelectable);
+  view.scene()->addItem(item1);
+  view.scene()->addItem(item2);
+  view.show();
+  view.setGeometry(0,0,300,300);
+  item1->setSelected(false);
+  item2->setSelected(false);
+  view.show();
+  QVERIFY(view.scene()->selectedItems().empty());
+  for (int i=0; i!=100; ++i) //Very often
+  {
+    QTest::keyClick(&view, Qt::Key_Space, Qt::NoModifier);
+    view.show();
+    QVERIFY(view.scene()->selectedItems().size() == 1);
+  }
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test
@@ -258,4 +356,12 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QTest::keyClick(&view, Qt::Key_Shift, Qt::NoModifier, 100);
   view.show();
   QVERIFY(item2->hasFocus());
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::version()
+{
+  QVERIFY(!GetQtKeyboardFriendlyGraphicsViewVersion().empty());
+  QVERIFY(!GetQtKeyboardFriendlyGraphicsViewVersionHistory().empty());
+
 }

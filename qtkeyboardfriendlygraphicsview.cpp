@@ -339,6 +339,7 @@ void ribi::KeyPressEventCtrl(
       delta_x = -10.0;
       break;
     default:
+      event->ignore();
       return;
   }
   for (const auto item: q.GetScene().selectedItems())
@@ -503,31 +504,33 @@ void ribi::SetRandomFocus(
     assert(item->isSelected());
     item->setSelected(false);
   }
+  assert(!items.empty());
 
   //Let a random item receive focus
-  if (!items.empty())
+  static std::mt19937 rng_engine{0};
+  std::uniform_int_distribution<int> distribution(0, static_cast<int>(items.size()) - 1);
+  const int i{distribution(rng_engine)};
+  assert(i >= 0);
+  assert(i < items.size());
+  auto& new_focus_item = items[i];
+  assert(!new_focus_item->isSelected());
+  assert(new_focus_item->flags() & QGraphicsItem::ItemIsFocusable);
+  assert(new_focus_item->flags() & QGraphicsItem::ItemIsSelectable);
+  assert(new_focus_item->isVisible());
+  new_focus_item->setFocus(Qt::TabFocusReason);
+  new_focus_item->setSelected(true);
+  //#define REALLY_LET_ME_KNOW
+  #ifdef REALLY_LET_ME_KNOW
+  if (!new_focus_item->isSelected())
   {
-    static std::mt19937 rng_engine{0};
-    std::uniform_int_distribution<int> distribution(0, static_cast<int>(items.size()) - 1);
-    const int i{distribution(rng_engine)};
-    assert(i >= 0);
-    assert(i < items.size());
-    auto& new_focus_item = items[i];
-    assert(!new_focus_item->isSelected());
-    new_focus_item->setSelected(true);
-    new_focus_item->setFocus();
-    q.update();
-    if (!new_focus_item->isSelected())
-    {
-      qDebug() << "Warning: setSelected did not select the item";
-    }
-    if (!new_focus_item->hasFocus())
-    {
-      qDebug() << "Warning: setFocus did not set focus to the item";
-    }
+    qDebug() << "Warning: setSelected did not select the item";
   }
+  if (!new_focus_item->hasFocus())
+  {
+    qDebug() << "Warning: setFocus did not set focus to the item";
+  }
+  #endif // REALLY_LET_ME_KNOW
 }
-
 
 void ribi::SetRandomSelectedness(
   QtKeyboardFriendlyGraphicsView& q
