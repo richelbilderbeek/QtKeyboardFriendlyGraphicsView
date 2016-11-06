@@ -8,3 +8,5 @@ SOURCES += \
     $$PWD/qtkeyboardfriendlygraphicsviewdemomenudialog.cpp \
     $$PWD/qtkeyboardfriendlygraphicsviewdemowidget.cpp
 
+FORMS += \
+    $$PWD/qtkeyboardfriendlygraphicsviewdemomenudialog.ui

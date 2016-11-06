@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QtTestKeyboardFriendlyGraphicsViewMenuDialog</class>
+ <widget class="QDialog" name="QtTestKeyboardFriendlyGraphicsViewMenuDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>584</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TestQtKeyboardFriendlyGraphicsView</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="ToolTestQtKeyboardFriendlyGraphicsView.qrc">
+    <normaloff>:/images/PicR14x14_opaque.png</normaloff>:/images/PicR14x14_opaque.png</iconset>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QPlainTextEdit" name="plainTextEdit">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="layout"/>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="ToolTestQtKeyboardFriendlyGraphicsView.qrc"/>
+ </resources>
+ <connections/>
+</ui>
