@@ -309,6 +309,15 @@ void ribi::qtkeyboardfriendlygraphicsview_test
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_space_when_no_items_is_rejected()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QKeyEvent e(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+  view.keyPressEvent(&e);
+  QVERIFY(!e.isAccepted());
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
   ::press_nonsense_is_rejected()
 {
   QtKeyboardFriendlyGraphicsView view;

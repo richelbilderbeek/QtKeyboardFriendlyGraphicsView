@@ -23,6 +23,7 @@ private slots:
   void press_shift_arrow_when_no_items_is_rejected();
   void press_shift_nonsense_is_rejected();
   void press_space_is_accepted();
+  void press_space_when_no_items_is_rejected();
   void press_nonsense_is_rejected();
   void space_selects_one_random_item_when_zero_were_selected();
   void space_selects_one_random_item_when_two_were_selected();
