@@ -2,6 +2,7 @@
 #define QTKEYBOARDFRIENDLYGRAPHICSVIEW_H
 
 #include <functional>
+#include <memory>
 #include <vector>
 #include <QGraphicsView>
 
@@ -26,6 +27,16 @@ public:
   ///Respond to a key press
   virtual void keyPressEvent(QKeyEvent *event) override;
 };
+
+///Collect the items that are focusable and selectable
+QList<QGraphicsItem *> CollectFocusableAndSelectableItems(
+  const QtKeyboardFriendlyGraphicsView& v)
+;
+
+///Creates a focusable and selectable item
+std::unique_ptr<QGraphicsItem> CreateFocusableAndSelectableItem(
+  const std::string tooltip = "Item"
+);
 
 void DoFocus(QGraphicsItem * const nsi);
 
@@ -74,22 +85,22 @@ std::function<bool(const double, const double)> GetStrictSearchFunction(
 
 void KeyPressEventCtrl(
   QtKeyboardFriendlyGraphicsView& q,
-  QKeyEvent *event
+  QKeyEvent * const event
 ) noexcept;
 
 void KeyPressEventNoModifiers(
   QtKeyboardFriendlyGraphicsView& q,
-  QKeyEvent *event
+  QKeyEvent * const event
 ) noexcept;
 
 void KeyPressEventNoModifiersArrowKey(
   QtKeyboardFriendlyGraphicsView& q,
-  QKeyEvent *event
+  QKeyEvent * const event
 ) noexcept;
 
 void KeyPressEventShift(
   QtKeyboardFriendlyGraphicsView& q,
-  QKeyEvent *event
+  QKeyEvent * const event
 ) noexcept;
 
 std::vector<QGraphicsItem *> Look(
@@ -101,7 +112,8 @@ void ReallyLoseFocus(QtKeyboardFriendlyGraphicsView& q) noexcept;
 
 ///Give focus to a random item
 void SetRandomFocus(
-  QtKeyboardFriendlyGraphicsView& q
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent * const event
 );
 
 ///Give selectedness to one random item

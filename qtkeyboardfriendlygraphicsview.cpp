@@ -23,6 +23,36 @@ ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* pa
   assert(scene());
 }
 
+QList<QGraphicsItem *> ribi::CollectFocusableAndSelectableItems(
+  const QtKeyboardFriendlyGraphicsView& v)
+{
+  //Collect focusable items
+  const QList<QGraphicsItem *> all_items = v.items();
+  QList<QGraphicsItem *> items;
+  std::copy_if(std::begin(all_items),std::end(all_items),std::back_inserter(items),
+    [](const QGraphicsItem* const item)
+    {
+      return (item->flags() & QGraphicsItem::ItemIsFocusable)
+        && (item->flags() & QGraphicsItem::ItemIsSelectable)
+        && item->isVisible();
+    }
+  );
+  return items;
+}
+
+std::unique_ptr<QGraphicsItem> ribi::CreateFocusableAndSelectableItem(
+  const std::string tooltip
+)
+{
+  std::unique_ptr<QGraphicsItem> item{
+    new QGraphicsRectItem
+  };
+  item->setToolTip(tooltip.c_str());
+  item->setFlag(QGraphicsItem::ItemIsFocusable);
+  item->setFlag(QGraphicsItem::ItemIsSelectable);
+  return item;
+}
+
 void ribi::DoSelect(QGraphicsItem * const nsi)
 {
   if (nsi)
@@ -322,7 +352,7 @@ void ribi::KeyPressEventCtrl(
 
 void ribi::KeyPressEventNoModifiers(
   QtKeyboardFriendlyGraphicsView& q,
-  QKeyEvent *event
+  QKeyEvent * const event
 ) noexcept
 {
   assert(!(event->modifiers() & Qt::ShiftModifier));
@@ -331,7 +361,7 @@ void ribi::KeyPressEventNoModifiers(
   switch (event->key())
   {
     case Qt::Key_Space:
-      SetRandomFocus(q); //If you want to select a random item, use CTRL-space
+      SetRandomFocus(q, event); //If you want to select a random item, use CTRL-space
       return;
     case Qt::Key_Up:
     case Qt::Key_Right:
@@ -339,7 +369,9 @@ void ribi::KeyPressEventNoModifiers(
     case Qt::Key_Down:
       KeyPressEventNoModifiersArrowKey(q, event);
       return;
-    default: return;
+    default:
+      event->ignore();
+      return;
   }
 }
 
@@ -350,6 +382,7 @@ void ribi::KeyPressEventNoModifiersArrowKey(
 {
   QGraphicsItem* const current_focus_item = q.GetScene().focusItem(); //Can be nullptr
   if (!current_focus_item) {
+    event->ignore();
     return;
   }
 
@@ -452,9 +485,17 @@ void ribi::ReallyLoseFocus(QtKeyboardFriendlyGraphicsView& q) noexcept
 }
 
 void ribi::SetRandomFocus(
-  QtKeyboardFriendlyGraphicsView& q
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent * const event
 )
 {
+  const auto items = CollectFocusableAndSelectableItems(q);
+  if (items.empty())
+  {
+    event->ignore();
+    return;
+  }
+
   ReallyLoseFocus(q);
 
   for (auto item: q.GetScene().selectedItems())
@@ -463,18 +504,7 @@ void ribi::SetRandomFocus(
     item->setSelected(false);
   }
 
-
   //Let a random item receive focus
-  const QList<QGraphicsItem *> all_items = q.items();
-  QList<QGraphicsItem *> items;
-  std::copy_if(std::begin(all_items),std::end(all_items),std::back_inserter(items),
-    [](const QGraphicsItem* const item)
-    {
-      return (item->flags() & QGraphicsItem::ItemIsFocusable)
-        && (item->flags() & QGraphicsItem::ItemIsSelectable)
-        && item->isVisible();
-    }
-  );
   if (!items.empty())
   {
     static std::mt19937 rng_engine{0};
