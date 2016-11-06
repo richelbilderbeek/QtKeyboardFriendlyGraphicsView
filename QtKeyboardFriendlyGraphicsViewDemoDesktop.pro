@@ -34,3 +34,7 @@ include(../RibiClasses/CppQtRoundedRectItem/CppQtRoundedRectItem.pri)
 
 
 SOURCES += qtmain.cpp
+
+# gcov
+QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+LIBS += -lgcov
