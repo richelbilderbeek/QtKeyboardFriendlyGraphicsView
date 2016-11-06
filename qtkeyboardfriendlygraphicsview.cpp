@@ -417,6 +417,7 @@ void ribi::KeyPressEventShift(
   const std::set<int> keys_accepted = { Qt::Key_Up, Qt::Key_Right, Qt::Key_Down, Qt::Key_Left };
   if (keys_accepted.count(event->key()) == 0)
   {
+    event->ignore();
     return;
   }
 
@@ -425,6 +426,7 @@ void ribi::KeyPressEventShift(
   QGraphicsItem* const current_focus_item = q.GetScene().focusItem();
   if (!current_focus_item)
   {
+    event->ignore();
     return;
   }
 

@@ -167,6 +167,20 @@ void ribi::qtkeyboardfriendlygraphicsview_test::bash_keys()
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_alt_nonsense_is_rejected()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  view.scene()->addItem(item1);
+  QKeyEvent e(QEvent::KeyPress, Qt::Key_F6, Qt::AltModifier);
+  view.keyPressEvent(&e);
+  QVERIFY(!e.isAccepted());
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
   ::press_arrow_when_no_items_is_rejected()
 {
   //When there are no items, focus cannot be moved
@@ -230,6 +244,55 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QVERIFY(e.isAccepted());
 }
 
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_shift_arrow_when_no_items_is_rejected()
+{
+  //When there are no items, focus cannot be moved
+  {
+    QtKeyboardFriendlyGraphicsView view;
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Up, Qt::ShiftModifier);
+    view.keyPressEvent(&e);
+    QVERIFY(!e.isAccepted());
+  }
+  {
+    QtKeyboardFriendlyGraphicsView view;
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Right, Qt::ShiftModifier);
+    view.keyPressEvent(&e);
+    QVERIFY(!e.isAccepted());
+  }
+  {
+    QtKeyboardFriendlyGraphicsView view;
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Down, Qt::ShiftModifier);
+    view.keyPressEvent(&e);
+    QVERIFY(!e.isAccepted());
+  }
+  {
+    QtKeyboardFriendlyGraphicsView view;
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Left, Qt::ShiftModifier);
+    view.keyPressEvent(&e);
+    QVERIFY(!e.isAccepted());
+  }
+  {
+    QtKeyboardFriendlyGraphicsView view;
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Space, Qt::ShiftModifier);
+    view.keyPressEvent(&e);
+    QVERIFY(!e.isAccepted());
+  }
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_shift_nonsense_is_rejected()
+{
+  QtKeyboardFriendlyGraphicsView view;
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  view.scene()->addItem(item1);
+  QKeyEvent e(QEvent::KeyPress, Qt::Key_F6, Qt::ShiftModifier);
+  view.keyPressEvent(&e);
+  QVERIFY(!e.isAccepted());
+}
 
 void ribi::qtkeyboardfriendlygraphicsview_test
   ::press_space_is_accepted()
