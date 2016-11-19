@@ -36,6 +36,17 @@ private:
   void DoUpdateScene();
 };
 
+void AddArrowItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddDisplayPosItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddLeftRightRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddLegend(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddGraphicsRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddPathArrowItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddQuadBezierArrows(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddRoundedEditRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddRoundedRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddRoundedTextRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+
 } //~namespace ribi
 
 #endif // QTTESTKEYBOARDFRIENDLYGRAPHICSVIEWWIDGET_H

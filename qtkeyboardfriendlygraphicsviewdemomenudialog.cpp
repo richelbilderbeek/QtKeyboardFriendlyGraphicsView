@@ -71,7 +71,8 @@ namespace ribi {
     {
       return QKeyEvent(QEvent::KeyPress,Qt::Key_X,Qt::NoModifier);
     }
-    QKeyEvent CreateRandomKey() noexcept {
+    QKeyEvent CreateRandomKey() noexcept
+    {
       switch (std::rand() % 10)
       {
         case 0: return CreateCtrlLeft();
@@ -84,8 +85,8 @@ namespace ribi {
         case 7: return CreateSpace();
         case 8: return CreateUp();
         case 9: return CreateX();
+        default: return CreateSpace();
       }
-      return CreateSpace();
     }
   }
 }
