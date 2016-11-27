@@ -28,6 +28,13 @@ public:
   virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
+///Add a random item to the selected items
+///Occurs when pressing SHIFT-space
+void AddSelectRandomItem(
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent * const event
+);
+
 ///Collect the items that are focusable and selectable
 QList<QGraphicsItem *> CollectFocusableAndSelectableItems(
   const QtKeyboardFriendlyGraphicsView& v)
@@ -116,10 +123,14 @@ void SetRandomFocus(
   QKeyEvent * const event
 );
 
-///Give selectedness to one random item
+///Give selectedness to one random item,
+///event will be ignored if there are no items to selec
 void SetRandomSelectedness(
-  QtKeyboardFriendlyGraphicsView& q
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent * const event
 );
+
+void UnselectAllItems(QtKeyboardFriendlyGraphicsView& q);
 
 } //~namespace ribi
 

@@ -23,6 +23,46 @@ ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* pa
   assert(scene());
 }
 
+void ribi::AddSelectRandomItem(
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent * const event
+)
+{
+  assert(event);
+  const auto selectable_items = GetSelectableVisibleItems(q.GetScene());
+  if (selectable_items.empty())
+  {
+    event->ignore();
+    return;
+  }
+  if (selectable_items.size() == 1)
+  {
+    SetRandomSelectedness(q, event); //Handles acceptance of event
+    return;
+  }
+  //Filter for items that are not yet selected
+  QList<QGraphicsItem *> unselected_items;
+  std::copy_if(
+    std::begin(selectable_items), std::end(selectable_items),
+    std::back_inserter(unselected_items),
+      [](const auto item) { return !item->isSelected(); }
+  );
+  if (unselected_items.empty())
+  {
+    //Are there still items left to add-select?
+    event->ignore();
+    return;
+  }
+  static std::mt19937 rng_engine{0};
+  std::uniform_int_distribution<int> distribution(0, static_cast<int>(unselected_items.size()) - 1);
+  const int i{distribution(rng_engine)};
+  assert(i >= 0);
+  assert(i < unselected_items.size());
+  auto& new_focus_item = unselected_items[i];
+  assert(!new_focus_item->isSelected());
+  new_focus_item->setSelected(true);
+}
+
 QList<QGraphicsItem *> ribi::CollectFocusableAndSelectableItems(
   const QtKeyboardFriendlyGraphicsView& v)
 {
@@ -308,7 +348,7 @@ void ribi::QtKeyboardFriendlyGraphicsView::keyPressEvent(QKeyEvent *event)
 
 void ribi::KeyPressEventCtrl(
   QtKeyboardFriendlyGraphicsView& q,
-  QKeyEvent *event
+  QKeyEvent * const event
 ) noexcept
 {
   //CTRL: Move items
@@ -317,7 +357,7 @@ void ribi::KeyPressEventCtrl(
   //Do special movements
   if (event->key() == Qt::Key_Space)
   {
-    SetRandomSelectedness(q);
+    SetRandomSelectedness(q, event);
     return;
   }
 
@@ -413,6 +453,11 @@ void ribi::KeyPressEventShift(
 ) noexcept
 {
   assert(event->modifiers() & Qt::ShiftModifier);
+  if (event->key() == Qt::Key_Space)
+  {
+    AddSelectRandomItem(q, event);
+    return;
+  }
 
   const std::set<int> keys_accepted = { Qt::Key_Up, Qt::Key_Right, Qt::Key_Down, Qt::Key_Left };
   if (keys_accepted.count(event->key()) == 0)
@@ -535,6 +580,35 @@ void ribi::SetRandomFocus(
 }
 
 void ribi::SetRandomSelectedness(
+  QtKeyboardFriendlyGraphicsView& q,
+  QKeyEvent * const event
+)
+{
+  assert(event);
+
+  //Choose a random item visible item to receive selectedness
+  const QList<QGraphicsItem *> items = GetSelectableVisibleItems(q.GetScene());
+  if (items.empty())
+  {
+    event->ignore();
+    return;
+  }
+  UnselectAllItems(q);
+  ReallyLoseFocus(q);
+  assert(q.GetScene().selectedItems().size() == 0);
+  assert(!items.empty());
+  static std::mt19937 rng_engine{0};
+  std::uniform_int_distribution<int> distribution(0, static_cast<int>(items.size()) - 1);
+  const int i{distribution(rng_engine)};
+  assert(i >= 0);
+  assert(i < items.size());
+  auto& new_focus_item = items[i];
+  assert(!new_focus_item->isSelected());
+  new_focus_item->setSelected(true);
+  assert(q.GetScene().selectedItems().size() == 1);
+}
+
+void ribi::UnselectAllItems(
   QtKeyboardFriendlyGraphicsView& q
 )
 {
@@ -545,25 +619,4 @@ void ribi::SetRandomSelectedness(
     }
   }
   assert(q.GetScene().selectedItems().size() == 0);
-
-  if (q.GetScene().focusItem()) {
-    q.GetScene().focusItem()->clearFocus();
-  }
-
-  //Choose a random item visible item to receive selectedness
-  const QList<QGraphicsItem *> items = GetSelectableVisibleItems(q.GetScene());
-
-  assert(q.GetScene().selectedItems().size() == 0);
-  if (!items.empty())
-  {
-    static std::mt19937 rng_engine{0};
-    std::uniform_int_distribution<int> distribution(0, static_cast<int>(items.size()) - 1);
-    const int i{distribution(rng_engine)};
-    assert(i >= 0);
-    assert(i < items.size());
-    auto& new_focus_item = items[i];
-    assert(!new_focus_item->isSelected());
-    new_focus_item->setSelected(true);
-    assert(q.GetScene().selectedItems().size() == 1);
-  }
 }
