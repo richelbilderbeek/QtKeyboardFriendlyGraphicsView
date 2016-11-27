@@ -11,6 +11,13 @@ class qtkeyboardfriendlygraphicsview_test : public QObject
     Q_OBJECT
 
 private slots:
+
+  //Todo
+  void press_shift_space_add_selects_an_item_when_zero_were_selected();
+  void press_shift_space_add_selects_an_item_when_one_were_selected();
+  void press_shift_space_add_selects_an_item_when_two_were_selected();
+
+  //Done
   void bash_keys();
   void ctrl_space_selects_one_random_item_when_zero_were_selected();
   void ctrl_space_selects_one_random_item_when_two_were_selected();

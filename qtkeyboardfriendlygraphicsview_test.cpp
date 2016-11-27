@@ -1,9 +1,38 @@
 #include "qtkeyboardfriendlygraphicsview_test.h"
 #include "qtkeyboardfriendlygraphicsview.h"
 
+#include <memory>
 #include <QDebug>
 #include <QKeyEvent>
 #include <QGraphicsRectItem>
+
+std::unique_ptr<ribi::QtKeyboardFriendlyGraphicsView> create_test_view()
+{
+  std::unique_ptr<ribi::QtKeyboardFriendlyGraphicsView> view{
+    std::make_unique<ribi::QtKeyboardFriendlyGraphicsView>()
+  };
+  QGraphicsRectItem * const item1{new QGraphicsRectItem};
+  QGraphicsRectItem * const item2{new QGraphicsRectItem};
+  QGraphicsRectItem * const item3{new QGraphicsRectItem};
+  item1->setToolTip("Item1");
+  item2->setToolTip("Item2");
+  item3->setToolTip("Item3");
+  item1->setFlag(QGraphicsItem::ItemIsFocusable);
+  item2->setFlag(QGraphicsItem::ItemIsFocusable);
+  item3->setFlag(QGraphicsItem::ItemIsFocusable);
+  item1->setFlag(QGraphicsItem::ItemIsSelectable);
+  item2->setFlag(QGraphicsItem::ItemIsSelectable);
+  item3->setFlag(QGraphicsItem::ItemIsSelectable);
+  view->scene()->addItem(item1);
+  view->scene()->addItem(item2);
+  view->scene()->addItem(item3);
+  view->show();
+  view->setGeometry(0,0,300,300);
+  item1->setSelected(false);
+  item2->setSelected(false);
+  item3->setSelected(false);
+  return view;
+}
 
 void ribi::qtkeyboardfriendlygraphicsview_test
   ::collect_focusable_and_selectable_items()
@@ -292,6 +321,49 @@ void ribi::qtkeyboardfriendlygraphicsview_test
   QKeyEvent e(QEvent::KeyPress, Qt::Key_F6, Qt::ShiftModifier);
   view.keyPressEvent(&e);
   QVERIFY(!e.isAccepted());
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_shift_space_add_selects_an_item_when_zero_were_selected()
+{
+  auto view = create_test_view();
+  view->show();
+  QVERIFY(view->scene()->selectedItems().empty());
+  QTest::keyClick(view.get(), Qt::Key_Space, Qt::ShiftModifier);
+  view->show();
+  QVERIFY(view->scene()->selectedItems().size() == 1);
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_shift_space_add_selects_an_item_when_one_were_selected()
+{
+  auto view = create_test_view();
+  view->show();
+  QVERIFY(view->scene()->selectedItems().empty());
+  for (int i=0; i!=100; ++i) //Very often
+  {
+    QTest::keyClick(view.get(), Qt::Key_Space, Qt::NoModifier);
+    view->show();
+    QVERIFY(view->scene()->selectedItems().size() == 1);
+    QTest::keyClick(view.get(), Qt::Key_Space, Qt::ShiftModifier);
+    QVERIFY(view->scene()->selectedItems().size() == 2);
+  }
+}
+
+void ribi::qtkeyboardfriendlygraphicsview_test
+  ::press_shift_space_add_selects_an_item_when_two_were_selected()
+{
+  auto view = create_test_view();
+  view->show();
+  QVERIFY(view->scene()->selectedItems().empty());
+  for (int i=0; i!=100; ++i) //Very often
+  {
+    QTest::keyClick(view.get(), Qt::Key_Space, Qt::NoModifier);
+    view->show();
+    QTest::keyClick(view.get(), Qt::Key_Space, Qt::ShiftModifier);
+    QTest::keyClick(view.get(), Qt::Key_Space, Qt::ShiftModifier);
+    QVERIFY(view->scene()->selectedItems().size() == 3);
+  }
 }
 
 void ribi::qtkeyboardfriendlygraphicsview_test
