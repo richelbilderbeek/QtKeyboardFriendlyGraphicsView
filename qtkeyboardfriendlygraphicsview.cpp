@@ -566,6 +566,8 @@ void ribi::SetRandomFocus(
   assert(new_focus_item->isVisible());
   new_focus_item->setFocus(Qt::TabFocusReason);
   new_focus_item->setSelected(true);
+  new_focus_item->setFocus(Qt::TabFocusReason);
+  new_focus_item->setSelected(true);
   //#define REALLY_LET_ME_KNOW
   #ifdef REALLY_LET_ME_KNOW
   if (!new_focus_item->isSelected())
