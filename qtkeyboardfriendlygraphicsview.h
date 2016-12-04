@@ -37,8 +37,8 @@ void AddSelectRandomItem(
 
 ///Collect the items that are focusable and selectable
 QList<QGraphicsItem *> CollectFocusableAndSelectableItems(
-  const QtKeyboardFriendlyGraphicsView& v)
-;
+  const QtKeyboardFriendlyGraphicsView& v
+);
 
 ///Creates a focusable and selectable item
 std::unique_ptr<QGraphicsItem> CreateFocusableAndSelectableItem(

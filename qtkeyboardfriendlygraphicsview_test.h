@@ -13,6 +13,7 @@ class qtkeyboardfriendlygraphicsview_test : public QObject
 private slots:
 
   //Todo
+  void select_random_node_keyboard_edit();
   void press_shift_space_add_selects_an_item_when_zero_were_selected();
   void press_shift_space_add_selects_an_item_when_one_were_selected();
   void press_shift_space_add_selects_an_item_when_two_were_selected();
