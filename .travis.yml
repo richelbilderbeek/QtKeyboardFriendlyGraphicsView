@@ -25,6 +25,8 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
   # gcov
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+  # cppcheck
+  - sudo apt-get install -qq cppcheck
   # Codecov
   - sudo pip install codecov
   # OCLint
@@ -48,9 +50,12 @@ script:
   - ./QtKeyboardFriendlyGraphicsViewDemoDesktop &
   - sleep 10
   - sudo killall -9 QtKeyboardFriendlyGraphicsViewDemoDesktop
+  # cppcheck
+  - cppcheck .
   # Code coverage
   - ./get_code_cov
   - codecov
+  # OCLint
   - ./do_oclint
 
 after_success:
