@@ -75,7 +75,7 @@ QGraphicsItem * GetClosestNonselectedItem(
 
 std::function<bool(const double, const double)> GetLooseSearchFunction(
   const Direction direction
-) noexcept;
+);
 
 std::vector<QGraphicsItem *> GetNonSelectedNonFocusItems(
   const QtKeyboardFriendlyGraphicsView& q
@@ -88,7 +88,7 @@ QList<QGraphicsItem *> GetSelectableVisibleItems(const QGraphicsScene& s) noexce
 
 std::function<bool(const double, const double)> GetStrictSearchFunction(
   const Direction direction
-) noexcept;
+);
 
 void KeyPressEventCtrl(
   QtKeyboardFriendlyGraphicsView& q,

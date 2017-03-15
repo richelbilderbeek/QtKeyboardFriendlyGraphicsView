@@ -207,7 +207,7 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
 
 std::function<bool(const double, const double)> ribi::GetLooseSearchFunction(
   const Direction direction
-) noexcept
+)
 {
   const auto f_loose_above  = [](const double /* dx */, const double dy) { return dy < 0.0; };
   const auto f_loose_below  = [](const double /* dx */, const double dy) { return dy > 0.0; };
@@ -221,6 +221,7 @@ std::function<bool(const double, const double)> ribi::GetLooseSearchFunction(
     case Direction::left: return f_loose_left;
     case Direction::right: return f_loose_right;
   }
+  assert(!"Should not get here");
   throw std::logic_error("Cannot get here");
 }
 
@@ -302,7 +303,7 @@ QList<QGraphicsItem *> ribi::GetSelectableVisibleItems(const QGraphicsScene& s) 
 
 std::function<bool(const double, const double)> ribi::GetStrictSearchFunction(
   const Direction direction
-) noexcept
+)
 {
   const auto f_strict_above = [](const double dx, const double dy)
   {
@@ -328,6 +329,7 @@ std::function<bool(const double, const double)> ribi::GetStrictSearchFunction(
     case Direction::left: return f_strict_left;
     case Direction::right: return f_strict_right;
   }
+  assert(!"Should not get here");
   throw std::logic_error("Cannot get here");
 }
 
