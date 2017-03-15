@@ -51,7 +51,7 @@ script:
   - sleep 10
   - sudo killall -9 QtKeyboardFriendlyGraphicsViewDemoDesktop
   # cppcheck
-  - cppcheck .
+  - cppcheck --quiet --error-exitcode=1 . 
   # Code coverage
   - ./get_code_cov
   - codecov
