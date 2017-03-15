@@ -1,7 +1,3 @@
-CONFIG += debug_and_release
-
-include(../RibiLibraries/DesktopApplicationNoWeffcpp.pri)
-
 include(../RibiClasses/CppAbout/CppAbout.pri)
 include(../RibiClasses/CppFileIo/CppFileIo.pri)
 include(../RibiClasses/CppHelp/CppHelp.pri)
@@ -9,13 +5,12 @@ include(../RibiClasses/CppMenuDialog/CppMenuDialog.pri)
 include(../RibiClasses/CppQtAboutDialog/CppQtAboutDialog.pri)
 include(../RibiClasses/CppQtHideAndShowDialog/CppQtHideAndShowDialog.pri)
 
-include(../RibiLibraries/Apfloat.pri)
-include(../RibiLibraries/BoostAll.pri)
+#include(../RibiLibraries/BoostAll.pri)
 
 include(../RibiClasses/CppCounter/CppCounter.pri)
 include(../RibiClasses/CppContainer/CppContainer.pri)
 include(../RibiClasses/CppGeometry/CppGeometry.pri)
-include(../RibiClasses/CppPlane/CppPlane.pri)
+include(../plane/plane.pri)
 include(../RibiClasses/CppRibiRegex/CppRibiRegex.pri)
 include(../RibiClasses/CppRibiSystem/CppRibiSystem.pri)
 include(../RibiClasses/CppRibiTime/CppRibiTime.pri)
