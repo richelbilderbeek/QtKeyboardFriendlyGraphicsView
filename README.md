@@ -1,11 +1,10 @@
 # QtKeyboardFriendlyGraphicsView
 
-[![Travis CI logo](TravisCI.png)](https://travis-ci.org)
-![Whitespace](Whitespace.png)
-[![Codecov logo](Codecov.png)](https://www.codecov.io)
-
-[![Build Status](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView.svg?branch=master)](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView)
-[![codecov.io](https://codecov.io/github/richelbilderbeek/QtKeyboardFriendlyGraphicsView/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/QtKeyboardFriendlyGraphicsView?branch=master)
+Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)
+---|---
+master|[![Build Status](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView.svg?branch=master)](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView)
+develop|[![Build Status](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView.svg?branch=develop)](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView)
+coverity_scan|[![Build Status](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView.svg?branch=coverity_scan)](https://travis-ci.org/richelbilderbeek/QtKeyboardFriendlyGraphicsView)
 
 QtKeyboardFriendlyGraphicsView is a Qt class for a keyboard-friendly QGraphicsView.
 
