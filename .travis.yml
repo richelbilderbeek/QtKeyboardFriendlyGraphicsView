@@ -16,6 +16,21 @@ before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
 
+install: 
+  # C++14
+  - sudo apt-get install -qq g++-5
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+  # Qt5
+  - sudo apt-get install -qq libqt5webkit5-dev qtdeclarative5-dev libqt5svg5*
+  - export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+  # cppcheck
+  - sudo apt-get install -qq cppcheck
+  # Codecov
+  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+  - sudo pip install codecov
+  # OCLint
+  - ./install_oclint.sh
+
 install:
   # Qt5
   - sudo apt-get install -qq libqt5webkit5-dev qtdeclarative5-dev
@@ -42,21 +57,21 @@ before_script:
 
 script: 
   # Build and run test
-  - qmake QtKeyboardFriendlyGraphicsViewTest.pro
+  - qmake -qt=qt5 QtKeyboardFriendlyGraphicsViewTest.pro
   - make debug
   - ./QtKeyboardFriendlyGraphicsViewTest
   # Build and run and kill demo
-  - qmake QtKeyboardFriendlyGraphicsViewDemoDesktop.pro
+  - qmake -qt=qt5 QtKeyboardFriendlyGraphicsViewDemoDesktop.pro
   - make debug
   - ./QtKeyboardFriendlyGraphicsViewDemoDesktop &
   - sleep 10
   - sudo killall -9 QtKeyboardFriendlyGraphicsViewDemoDesktop
   # cppcheck
   - cppcheck --quiet --error-exitcode=1 . 
-  # Code coverage
-  - ./get_code_cov
+  # Get code coverage
+  - ./get_code_cov.sh >/dev/null
   - codecov
-  # OCLint
+  # Call OCLint
   - ./do_oclint
 
 after_success:
