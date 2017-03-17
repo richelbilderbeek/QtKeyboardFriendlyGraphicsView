@@ -31,6 +31,8 @@ install:
   - sudo pip install codecov
   # OCLint
   - ./install_oclint
+  # Other prerequisites
+  - ./download_other_githubs
 
 # Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:
@@ -39,7 +41,6 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 script: 
-  - ./install_githubs
   # Build and run test
   - qmake QtKeyboardFriendlyGraphicsViewTest.pro
   - make debug
