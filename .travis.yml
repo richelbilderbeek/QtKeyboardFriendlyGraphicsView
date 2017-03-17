@@ -71,7 +71,7 @@ script:
   # cppcheck
   - cppcheck --quiet --error-exitcode=1 . 
   # Get code coverage
-  - ./get_code_cov.sh >/dev/null
+  - ./get_code_cov >/dev/null
   - codecov
   # Call OCLint
   - ./do_oclint
