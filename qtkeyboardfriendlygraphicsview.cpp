@@ -618,9 +618,7 @@ void ribi::UnselectAllItems(
 {
   for (auto item: q.GetScene().items())
   {
-    if (item->isSelected()) {
-      item->setSelected(false);
-    }
+    item->setSelected(false);
   }
   assert(q.GetScene().selectedItems().size() == 0);
 }
