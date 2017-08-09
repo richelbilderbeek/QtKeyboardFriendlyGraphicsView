@@ -520,19 +520,21 @@ std::vector<QGraphicsItem *> ribi::Look(
   return v;
 }
 
+#ifdef BELIEVE_THIS_IS_A_GOOD_IDEA_20170809
 void ribi::ReallyLoseFocus(QtKeyboardFriendlyGraphicsView& q) noexcept
 {
   if (QGraphicsItem* const item = q.GetScene().focusItem())
   {
     assert(item);
     //Really lose focus
+    //item->setSelected(false); // #239
     item->setEnabled(false);
     //assert(item->isSelected()); //Not true
-    item->setSelected(false); // #239
     item->clearFocus();
     item->setEnabled(true);
   }
 }
+#endif // BELIEVE_THIS_IS_A_GOOD_IDEA_20170809
 
 void ribi::SetRandomFocus(
   QtKeyboardFriendlyGraphicsView& q,
@@ -546,7 +548,8 @@ void ribi::SetRandomFocus(
     return;
   }
 
-  ReallyLoseFocus(q);
+  //ReallyLoseFocus(q);
+  q.GetScene().clearFocus();
 
   for (auto item: q.GetScene().selectedItems())
   {
@@ -598,7 +601,10 @@ void ribi::SetRandomSelectedness(
     return;
   }
   UnselectAllItems(q);
-  ReallyLoseFocus(q);
+
+  //ReallyLoseFocus(q);
+  q.GetScene().clearFocus();
+
   assert(q.GetScene().selectedItems().size() == 0);
   assert(!items.empty());
   static std::mt19937 rng_engine{0};

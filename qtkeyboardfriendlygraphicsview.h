@@ -115,7 +115,9 @@ std::vector<QGraphicsItem *> Look(
   const std::function<bool(const double, const double)>& f
 );
 
+#ifdef BELIEVE_THIS_IS_A_GOOD_IDEA_20170809
 void ReallyLoseFocus(QtKeyboardFriendlyGraphicsView& q) noexcept;
+#endif // BELIEVE_THIS_IS_A_GOOD_IDEA_20170809
 
 ///Give focus to a random item
 void SetRandomFocus(
