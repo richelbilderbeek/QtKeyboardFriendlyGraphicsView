@@ -161,20 +161,11 @@ QGraphicsItem * ribi::GetClosestNonselectedItem(
   switch (key)
   {
     case Qt::Key_Up:
-      cnsi
-        = GetClosestNonselectedItem(q, focus_item, Direction::above);
-      break;
     case Qt::Key_Right:
-      cnsi
-        = GetClosestNonselectedItem(q, focus_item, Direction::right);
-      break;
     case Qt::Key_Down:
-      cnsi
-        = GetClosestNonselectedItem(q, focus_item, Direction::below);
-      break;
     case Qt::Key_Left:
       cnsi
-        = GetClosestNonselectedItem(q, focus_item, Direction::left);
+        = GetClosestNonselectedItem(q, focus_item, KeyToDirection(key));
       break;
     default:
       return nullptr;
@@ -494,6 +485,19 @@ void ribi::KeyPressEventShift(
   current_focus_item->clearFocus();
   if (nasi) { nasi->setFocus(); }
   q.GetScene().update();
+}
+
+ribi::Direction ribi::KeyToDirection(const int key)
+{
+  switch (key)
+  {
+    case Qt::Key_Up: return Direction::above;
+    case Qt::Key_Right: return Direction::right;
+    case Qt::Key_Down: return Direction::below;
+    case Qt::Key_Left: return Direction::left;
+    default: break;
+  }
+  throw std::invalid_argument("Cannot convert key to direction");
 }
 
 std::vector<QGraphicsItem *> ribi::Look(

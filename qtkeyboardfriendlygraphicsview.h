@@ -110,6 +110,10 @@ void KeyPressEventShift(
   QKeyEvent * const event
 ) noexcept;
 
+///Convert Qt::KEY_UP to Direction
+///Throws if key is unsupported
+Direction KeyToDirection(const int key);
+
 std::vector<QGraphicsItem *> Look(
   const QtKeyboardFriendlyGraphicsView& q,
   const std::function<bool(const double, const double)>& f
