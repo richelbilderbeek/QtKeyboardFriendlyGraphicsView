@@ -108,6 +108,7 @@ void ribi::DoSelect(QGraphicsItem * const nsi)
 
 void ribi::DoFocus(QGraphicsItem * const nsi)
 {
+  //nsi: newly selected item
   if (nsi) {
     nsi->setFocus();
     if (!nsi->hasFocus())
@@ -437,6 +438,7 @@ void ribi::KeyPressEventNoModifiersArrowKey(
   DoSelect(nsi);
   //Transfer focus
   current_focus_item->clearFocus();
+  qDebug() << __func__ << ": focus";
   DoFocus(nsi);
 }
 
