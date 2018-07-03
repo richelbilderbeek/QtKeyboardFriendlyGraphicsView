@@ -2,7 +2,7 @@
 cd ..
 git clone -b develop https://github.com/richelbilderbeek/boost_graph_cookbook_1
 git clone -b develop https://github.com/richelbilderbeek/ConceptMap
-git clone -b develop clone https://github.com/richelbilderbeek/plane
-git clone -b develop clone https://github.com/richelbilderbeek/RibiClasses
-git clone -b develop clone https://github.com/richelbilderbeek/RibiLibraries
+git clone -b develop https://github.com/richelbilderbeek/plane
+git clone -b develop https://github.com/richelbilderbeek/RibiClasses
+git clone -b develop https://github.com/richelbilderbeek/RibiLibraries
 
