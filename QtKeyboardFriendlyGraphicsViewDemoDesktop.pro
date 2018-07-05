@@ -32,10 +32,10 @@ SOURCES += qtmain.cpp
 
 # C++14
 CONFIG += c++14
-QMAKE_CXX = g++-5
-QMAKE_LINK = g++-5
-QMAKE_CC = gcc-5
 QMAKE_CXXFLAGS += -std=c++14
+
+# Fix error: unrecognized option '--push-state--no-as-needed'
+QMAKE_LFLAGS += -fuse-ld=gold
 
 # Qt and Qwt do not go well with -Weffc++
 # -Wshadow does not go well with Qwt

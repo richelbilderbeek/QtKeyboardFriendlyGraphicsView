@@ -193,7 +193,6 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewMenuDialog::ShowAbout()
   about.AddLibrary("QtLeftRightRectItem version: " + QtLeftRightRectItem::GetVersion());
   about.AddLibrary("QtPathArrowItem version: " + QtPathArrowItem::GetVersion());
   about.AddLibrary("QtQuadBezierArrowItem version: " + QtQuadBezierArrowItem::GetVersion());
-  about.AddLibrary("QtRoundedRectItem version: " + QtRoundedRectItem::GetVersion());
   about.AddLibrary("QtRoundedEditRectItem version: " + QtRoundedEditRectItem::GetVersion());
   QtAboutDialog d(about);
   d.setWindowIcon(this->windowIcon());
