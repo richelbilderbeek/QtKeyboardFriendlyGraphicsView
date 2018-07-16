@@ -1,5 +1,5 @@
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Weffc++"
+
+
 #include "qtkeyboardfriendlygraphicsview.h"
 
 #include <cassert>
@@ -15,7 +15,7 @@
 
 #include "container.h"
 
-#pragma GCC diagnostic pop
+
 
 ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* parent)
   : QGraphicsView(new QGraphicsScene,parent)

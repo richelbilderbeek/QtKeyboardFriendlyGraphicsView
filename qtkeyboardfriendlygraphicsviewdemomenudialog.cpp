@@ -1,7 +1,7 @@
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Weffc++"
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+
+
+
+
 #include "qtkeyboardfriendlygraphicsviewdemomenudialog.h"
 #include "qtkeyboardfriendlygraphicsviewmenudialog.h"
 
@@ -23,7 +23,7 @@
 #include "qtkeyboardfriendlygraphicsviewdemowidget.h"
 #include "qtkeyboardfriendlygraphicsviewdemomenudialog.h"
 #include "ui_qtkeyboardfriendlygraphicsviewdemomenudialog.h"
-#pragma GCC diagnostic pop
+
 
 namespace ribi {
   namespace testqtkeyboardfriendlygraphicsviewmenudialog {

@@ -1,7 +1,7 @@
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Weffc++"
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+
+
+
+
 #include "qtkeyboardfriendlygraphicsviewdemowidget.h"
 
 #include <boost/array.hpp>
@@ -18,7 +18,7 @@
 #include "qtpatharrowitem.h"
 #include "qtroundededitrectitem.h"
 #include "qtquadbezierarrowitem.h"
-#pragma GCC diagnostic pop
+
 
 ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsViewWidget()
   : m_signal_request_about{},
@@ -423,8 +423,8 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::DoUpdateScene()
 }
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+
+
 void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::keyPressEvent(QKeyEvent *event) noexcept
 {
   switch (event->key())
@@ -436,4 +436,4 @@ void ribi::QtTestKeyboardFriendlyGraphicsViewWidget::keyPressEvent(QKeyEvent *ev
   }
   QtKeyboardFriendlyGraphicsView::keyPressEvent(event);
 }
-#pragma GCC diagnostic pop
+
