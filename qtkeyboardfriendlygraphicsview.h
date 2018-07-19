@@ -16,7 +16,7 @@ struct QtKeyboardFriendlyGraphicsView : public QGraphicsView
   Q_OBJECT //!OCLINT
 
 public:
-  explicit QtKeyboardFriendlyGraphicsView(QWidget* parent = 0);
+  explicit QtKeyboardFriendlyGraphicsView(QWidget* parent = nullptr);
 
   virtual ~QtKeyboardFriendlyGraphicsView() noexcept {}
 
