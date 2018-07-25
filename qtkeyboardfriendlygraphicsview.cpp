@@ -1,21 +1,11 @@
-
-
 #include "qtkeyboardfriendlygraphicsview.h"
 
 #include <cassert>
-#include <cmath>
-#include <functional>
-#include <iostream>
 #include <random>
-#include <stdexcept>
 #include <QDebug>
-#include <QGraphicsScene>
 #include <QKeyEvent>
-#include <QGraphicsSimpleTextItem>
-
+#include <QGraphicsItem>
 #include "container.h"
-
-
 
 ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* parent)
   : QGraphicsView(new QGraphicsScene,parent)
