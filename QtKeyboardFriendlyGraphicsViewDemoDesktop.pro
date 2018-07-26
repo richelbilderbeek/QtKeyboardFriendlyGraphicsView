@@ -28,6 +28,18 @@ include(../RibiClasses/CppQtRoundedEditRectItem/CppQtRoundedEditRectItem.pri)
 include(../RibiClasses/CppQtRoundedRectItem/CppQtRoundedRectItem.pri)
 
 
+# QtNode
+test_qt_note {
+  INCLUDEPATH += ../boost_graph_cookbook_1/boost_graph_cookbook_1
+  include(../boost_graph_cookbook_1/boost_graph_cookbook_1/boost_graph_cookbook_1_helper.pri)
+  include(../boost_graph_cookbook_1/boost_graph_cookbook_1/boost_graph_cookbook_1_no_properties.pri)
+  include(../RibiClasses/CppXml/CppXml.pri)
+  include(../RibiClasses/CppQtImage/CppQtImage.pri)
+  include(../ConceptMap/ConceptMap.pri)
+  include(../QtConceptMap/QtConceptMap.pri)
+  include(gsl.pri)
+}
+
 SOURCES += qtmain.cpp
 
 # C++14

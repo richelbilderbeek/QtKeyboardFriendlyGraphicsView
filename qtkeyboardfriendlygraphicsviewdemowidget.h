@@ -42,6 +42,7 @@ void AddLeftRightRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noe
 void AddLegend(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
 void AddGraphicsRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
 void AddPathArrowItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
+void AddQtNodes(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
 void AddQuadBezierArrows(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
 void AddRoundedEditRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;
 void AddRoundedRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept;

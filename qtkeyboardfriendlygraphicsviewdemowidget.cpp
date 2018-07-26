@@ -1,24 +1,21 @@
-
-
-
-
 #include "qtkeyboardfriendlygraphicsviewdemowidget.h"
 
-#include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/math/constants/constants.hpp>
 
 #include <QKeyEvent>
 
 #include "qtarrowitem.h"
+
+#ifdef TEST_QT_NODE
+#include "qtconceptmapqtnode.h"
+#endif
+
 #include "qtdisplaypositem.h"
 #include "qtleftrightrectitem.h"
-#include "qtroundedrectitem.h"
 #include "qtpatharrowitem.h"
-#include "qtroundededitrectitem.h"
 #include "qtquadbezierarrowitem.h"
-
+#include "qtroundededitrectitem.h"
+#include "qtroundedrectitem.h"
 
 ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsViewWidget()
   : m_signal_request_about{},
@@ -31,6 +28,7 @@ ribi::QtTestKeyboardFriendlyGraphicsViewWidget::QtTestKeyboardFriendlyGraphicsVi
   AddRoundedTextRectItems(*this);
   AddLeftRightRectItems(*this);
   AddDisplayPosItems(*this);
+  AddQtNodes(*this);
   AddQuadBezierArrows(*this);
   AddArrowItems(*this);
   AddPathArrowItems(*this);
@@ -309,6 +307,58 @@ void ribi::AddQuadBezierArrows(QtTestKeyboardFriendlyGraphicsViewWidget& widget)
       widget.scene()->addItem(item);
     }
   }
+}
+
+void ribi::AddQtNodes(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept
+{
+  #ifdef TEST_QT_NODE
+  using Item = ribi::cmap::QtNode;
+  const double midx = 2.0 * 174.0;
+  const double midy = -200.0;
+  const int n = 3;
+  const double ray = 100.0;
+  QGraphicsTextItem * const text = new QGraphicsTextItem("QtNode");
+  text->setPos(
+    midx - text->boundingRect().center().x(),
+    midy - text->boundingRect().center().y()
+  );
+  widget.scene()->addItem(text);
+  QGraphicsEllipseItem * const circle{
+    new QGraphicsEllipseItem(midx - ray, midy - ray,2.0 * ray, 2.0 * ray)
+  };
+  widget.scene()->addItem(circle);
+
+
+  for (int i=0; i!=n; ++i)
+  {
+    const double pi = boost::math::constants::pi<double>();
+    const double angle = 2.0 * pi * static_cast<double>(i) / static_cast<double>(n);
+    const double x = midx + (std::sin(angle) * 0.5 * ray);
+    const double y = midy - (std::cos(angle) * 0.5 * ray);
+    auto * const item = new Item();
+    item->setPos(x - item->boundingRect().center().x(),y - item->boundingRect().center().y());
+    item->setToolTip(
+      (std::string("QtNode #") + std::to_string(i)).c_str()
+    );
+    switch (i)
+    {
+      case 0:
+        item->setFlags(ribi::cmap::CreateEditFlags(*item));
+        item->SetText( { "Edit"} );
+        break;
+      case 1: item->setFlags(ribi::cmap::CreateRateFlags(*item));
+        item->SetText( { "Rate"} );
+        break;
+      case 2: item->setFlags(ribi::cmap::CreateUninitializedFlags(*item));
+        item->SetText( { "Uninitialized"} );
+        break;
+      default: assert(!"Should not get here");
+    }
+    widget.scene()->addItem(item);
+  }
+  #else
+  assert(widget.size().width() >= 0.0); //Just something
+  #endif
 }
 
 void ribi::AddRoundedEditRectItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept
