@@ -13,6 +13,11 @@ ribi::QtKeyboardFriendlyGraphicsView::QtKeyboardFriendlyGraphicsView(QWidget* pa
   assert(scene());
 }
 
+ribi::QtKeyboardFriendlyGraphicsView::~QtKeyboardFriendlyGraphicsView()
+{
+
+}
+
 void ribi::AddSelectRandomItem(
   QtKeyboardFriendlyGraphicsView& q,
   QKeyEvent * const event

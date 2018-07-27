@@ -18,7 +18,7 @@ struct QtKeyboardFriendlyGraphicsView : public QGraphicsView
 public:
   explicit QtKeyboardFriendlyGraphicsView(QWidget* parent = nullptr);
 
-  virtual ~QtKeyboardFriendlyGraphicsView() noexcept {}
+  virtual ~QtKeyboardFriendlyGraphicsView() noexcept;
 
   ///Obtain the QGraphicsScene, which is always present
   const QGraphicsScene& GetScene() const noexcept;
