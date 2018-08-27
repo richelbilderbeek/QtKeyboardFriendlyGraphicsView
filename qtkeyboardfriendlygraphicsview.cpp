@@ -94,10 +94,6 @@ void ribi::DoSelect(QGraphicsItem * const nsi)
   {
     assert(!nsi->isSelected());
     nsi->setSelected(true);
-    if (!nsi->isSelected())
-    {
-      qDebug() << "Warning: nsi not selected";
-    }
   }
 }
 
@@ -106,10 +102,6 @@ void ribi::DoFocus(QGraphicsItem * const nsi)
   //nsi: newly selected item
   if (nsi) {
     nsi->setFocus();
-    if (!nsi->hasFocus())
-    {
-      qDebug() << "Warning: nsi has not received focus";
-    }
   }
 }
 
@@ -433,7 +425,6 @@ void ribi::KeyPressEventNoModifiersArrowKey(
   DoSelect(nsi);
   //Transfer focus
   current_focus_item->clearFocus();
-  qDebug() << __func__ << ": focus";
   DoFocus(nsi);
 }
 
@@ -574,17 +565,6 @@ void ribi::SetRandomFocus(
   new_focus_item->setSelected(true);
   new_focus_item->setFocus(Qt::TabFocusReason);
   new_focus_item->setSelected(true);
-  //#define REALLY_LET_ME_KNOW
-  #ifdef REALLY_LET_ME_KNOW
-  if (!new_focus_item->isSelected())
-  {
-    qDebug() << "Warning: setSelected did not select the item";
-  }
-  if (!new_focus_item->hasFocus())
-  {
-    qDebug() << "Warning: setFocus did not set focus to the item";
-  }
-  #endif // REALLY_LET_ME_KNOW
 }
 
 void ribi::SetRandomSelectedness(
