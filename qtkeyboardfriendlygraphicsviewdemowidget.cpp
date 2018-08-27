@@ -260,31 +260,31 @@ void ribi::AddPathArrowItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) n
 
 void ribi::AddQuadBezierArrows(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept
 {
-  typedef QtQuadBezierArrowItem Item;
+  using Item = QtQuadBezierArrowItem;
+  using boost::math::constants::pi;
   const double midx = -174.0;
   const double midy =  100.0;
   const int n = 3;
-  const double ray = 100.0;
+  const double radius = 100.0;
   QGraphicsTextItem * const text = new QGraphicsTextItem("QtQuadBezierArrowItem");
   text->setPos(midx - text->boundingRect().center().x(),midy - text->boundingRect().center().y());
   widget.scene()->addItem(text);
   QGraphicsEllipseItem * const circle{
-    new QGraphicsEllipseItem(midx - ray, midy - ray,2.0 * ray,2.0 * ray)
+    new QGraphicsEllipseItem(midx - radius, midy - radius,2.0 * radius,2.0 * radius)
   };
   widget.scene()->addItem(circle);
 
   for (int i=0; i!=n; ++i)
   {
-    const double pi = boost::math::constants::pi<double>();
-    const double angle = 2.0 * pi * static_cast<double>(i) / static_cast<double>(n);
-    boost::array<QGraphicsItem *,3> v;
-    v.assign(nullptr); assert(v[0] == nullptr && v[1] == nullptr && v[2] == nullptr);
-    for (int j=0; j!=3; ++j)
+    const double angle = 2.0 * pi<double>() * static_cast<double>(i) / static_cast<double>(n);
+    boost::array<QGraphicsItem *, 3> v;
+    v.assign(nullptr);
+    for (int j = 0; j != 3; ++j)
     {
       const double sub_ray = 90.0;
       const double sub_angle{
         angle
-        + (2.0 * 2.0 * pi * static_cast<double>(j + 1)
+        + (2.0 * 2.0 * pi<double>() * static_cast<double>(j + 1)
             / static_cast<double>( (3 + 2) * n)
           )
       };
