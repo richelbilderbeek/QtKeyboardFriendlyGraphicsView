@@ -258,7 +258,7 @@ void ribi::AddPathArrowItems(QtTestKeyboardFriendlyGraphicsViewWidget& widget) n
   }
 }
 
-void ribi::AddQuadBezierArrows(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept
+void ribi::AddQuadBezierArrows(QtTestKeyboardFriendlyGraphicsViewWidget& widget) noexcept //!OCLINT will not invest in refactoring a demo for now
 {
   using Item = QtQuadBezierArrowItem;
   using boost::math::constants::pi;
