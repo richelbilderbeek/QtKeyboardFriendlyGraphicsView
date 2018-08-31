@@ -512,22 +512,6 @@ std::vector<QGraphicsItem *> ribi::Look(
   return v;
 }
 
-#ifdef BELIEVE_THIS_IS_A_GOOD_IDEA_20170809
-void ribi::ReallyLoseFocus(QtKeyboardFriendlyGraphicsView& q) noexcept
-{
-  if (QGraphicsItem* const item = q.GetScene().focusItem())
-  {
-    assert(item);
-    //Really lose focus
-    //item->setSelected(false); // #239
-    item->setEnabled(false);
-    //assert(item->isSelected()); //Not true
-    item->clearFocus();
-    item->setEnabled(true);
-  }
-}
-#endif // BELIEVE_THIS_IS_A_GOOD_IDEA_20170809
-
 void ribi::SetRandomFocus(
   QtKeyboardFriendlyGraphicsView& q,
   QKeyEvent * const event
