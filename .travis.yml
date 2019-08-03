@@ -18,7 +18,7 @@ install:
   # Codecov
   - sudo pip install codecov
   # OCLint
-  - ./install_oclint.sh
+  - ./install_oclint
   # Other prerequisites
   - ./download_other_githubs
 
